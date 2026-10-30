@@ -1,7 +1,7 @@
 # Extrator de pedidos de WhatsApp com LLM ajustado (LoRA)
 
 > **Status: em andamento.** Este README é provisório; os resultados finais e o modelo no Hugging Face ainda não foram publicados.
-> A história completa, com erros e correções, está em [docs/DIARIO.md](docs/DIARIO.md).
+> A história completa, com erros e correções, está em [docs/DIARIO.md](docs/DIARIO.md). Próximos passos e como continuar o treino do v4: [docs/PROXIMOS_PASSOS.md](docs/PROXIMOS_PASSOS.md).
 
 Transforma uma mensagem livre de cliente em um pedido estruturado (JSON) para um espetinho:
 

@@ -42,6 +42,7 @@ def main() -> None:
     ap.add_argument("--rank", type=int, default=16)
     ap.add_argument("--batch", type=int, default=4)
     ap.add_argument("--acumular", type=int, default=4, help="lote efetivo = batch x acumular")
+    ap.add_argument("--retomar", action="store_true", help="continua do último checkpoint em outputs/checkpoints")
     a = ap.parse_args()
 
     tok = AutoTokenizer.from_pretrained(a.modelo)
@@ -63,11 +64,11 @@ def main() -> None:
         per_device_train_batch_size=a.batch, per_device_eval_batch_size=a.batch, gradient_accumulation_steps=a.acumular,
         lr_scheduler_type="cosine", warmup_steps=10, bf16=True, logging_steps=5, disable_tqdm=True,
         eval_strategy="epoch",
-        save_strategy="no", report_to="none", remove_unused_columns=False, seed=42,
+        save_strategy="steps", save_steps=50, save_total_limit=1, report_to="none",  # checkpoint: dá para pausar remove_unused_columns=False, seed=42,
     )
     trainer = Trainer(model=model, args=args, train_dataset=treino, eval_dataset=val,
                       data_collator=DataCollatorForSeq2Seq(tok, padding=True, label_pad_token_id=-100))
-    trainer.train()
+    trainer.train(resume_from_checkpoint=True if a.retomar else None)
 
     SAIDA.mkdir(parents=True, exist_ok=True)
     model.save_pretrained(SAIDA)  # salva só o adapter (pequeno)

@@ -14,6 +14,7 @@ Saída: data/train.jsonl, data/val.jsonl, data/test.jsonl
 import argparse
 import json
 import random
+import re
 from pathlib import Path
 
 from schema import CARDAPIO_PATH, Pedido
@@ -45,7 +46,8 @@ PAGAMENTOS = {
             "paga no pix, manda a chave"],
     "dinheiro": ["pago em dinheiro", "dinheiro", "pago na entrega em dinheiro", "vai ser dinheiro",
                  "dinheiro, troco pra 50", "dinheiro troco pra 100", "em dinheiro, sem troco",
-                 "dinheiro certinho", "preciso de troco pra 50, dinheiro"],
+                 "dinheiro certinho", "preciso de troco pra 50, dinheiro", "troco p 100", "troco p/ 50",
+                 "troco pra 20 reais", "vou de dinheiro, troco p 50"],
     "cartão de crédito": ["no crédito", "cartão de crédito", "credito", "passa no crédito",
                           "crédito na entrega", "maquininha no crédito", "cartão de crédito na entrega",
                           "credito na maquininha"],
@@ -74,7 +76,9 @@ PERGUNTAS = ["até que horas vcs ficam abertos?", "vcs abrem domingo?", "qual o 
              "o {p} é grande?", "como faço pra cancelar meu pedido?", "meu pedido ainda não chegou",
              "demora quanto pra entregar?", "obrigado, chegou tudo certo!", "valeu pelo atendimento",
              "vcs entregam em outro bairro?", "tem opção vegetariana?", "posso ir comer aí no balcão?",
-             "oi", "bom dia", "boa noite", "alguém aí?", "vocês têm wi-fi?", "ainda tá aberto?"]
+             "oi", "bom dia", "boa noite", "alguém aí?", "vocês têm wi-fi?", "ainda tá aberto?",
+             "meu pedido da {rua} já saiu pra entrega?", "cadê meu pedido? mandei pra {rua}",
+             "o pedido que fiz pra {rua} tá demorando", "faz 40 min que pedi, tá a caminho?"]
 
 
 def carregar_cardapio() -> dict:
@@ -182,13 +186,28 @@ def escrever_item(c: dict, rng: random.Random) -> str:
     return frase
 
 
+SEPARADORES = [" ", " ", ", ", ", ", ". ", ". ", "\n", ".\n", "... ", "! ", " - "]
+
+
+def juntar(partes: list[str], rng: random.Random) -> str:
+    """Junta as partes da mensagem com pontuação variada e, às vezes, ponto final (v4: o v3 era sensível a isso)."""
+    msg = rng.choice(SEPARADORES).join(p for p in partes if p)
+    if msg and rng.random() < 0.5 and msg[-1] not in ".?!":
+        msg += rng.choice([".", ".", "!", "...", "!!"])
+    return msg
+
+
+def capitalizar_frases(msg: str) -> str:
+    """Inicial maiúscula no começo de cada frase, como quem escreve de verdade no WhatsApp."""
+    return re.sub(r"(^|[.!?]\s+|\n)([a-zà-ú])", lambda m: m.group(1) + m.group(2).upper(), msg)
+
+
 def acabamento(msg: str, rng: random.Random) -> str:
-    """Passos finais iguais para qualquer mensagem: caixa baixa, abreviações e erros de digitação."""
-    if rng.random() < 0.7:
-        msg = msg.lower()
+    """Passos finais iguais para qualquer mensagem: abreviações, caixa (baixa ou de frase) e erros de digitação."""
     for longo, curto in ABREV.items():
         if longo in msg and rng.random() < 0.6:
             msg = msg.replace(longo, curto)
+    msg = msg.lower() if rng.random() < 0.5 else capitalizar_frases(msg)
     return digitar_errado(msg, rng, taxa=rng.choice([0.0, 0.0, 0.05, 0.1]))
 
 
@@ -223,19 +242,21 @@ def escrever_mensagem(pedido: Pedido, crus: list[dict], rng: random.Random, ctx:
     if rng.random() < 0.25:
         partes.insert(rng.choice([1, len(partes)]), rng.choice(RUIDOS))
     partes.append(rng.choice(FECHAMENTOS))
-    sep = rng.choice([" ", ", ", ". ", "\n"])
-    msg = acabamento(sep.join(p for p in partes if p), rng)
+    msg = acabamento(juntar(partes, rng), rng)
     return msg.replace(MARCADOR_END, pedido.endereco) if pedido.endereco else msg
 
 
 def mensagem_sem_pedido(cardapio: dict, rng: random.Random) -> str:
     """Mensagem que NÃO é pedido (pergunta, saudação, reclamação): a resposta correta é itens vazio."""
     nomes = [p["produto"] for g in ("espetinhos", "acompanhamentos", "bebidas") for p in cardapio[g]]
-    perguntas = [rng.choice(PERGUNTAS).format(p=rng.choice(nomes))]
+    def pergunta() -> str:
+        return rng.choice(PERGUNTAS).format(p=rng.choice(nomes), rua=f"{rng.choice(RUAS)} {rng.randint(1, 200)}")
+
+    perguntas = [pergunta()]
     if rng.random() < 0.3:
-        perguntas.append(rng.choice(PERGUNTAS).format(p=rng.choice(nomes)))
+        perguntas.append(pergunta())
     partes = [rng.choice(SAUDACOES)] + perguntas + [rng.choice(FECHAMENTOS)]
-    return acabamento(rng.choice([" ", ", ", ". ", "\n"]).join(p for p in partes if p), rng)
+    return acabamento(juntar(partes, rng), rng)
 
 
 def gerar(n: int, seed: int, proibidas: frozenset = frozenset()) -> list[dict]:

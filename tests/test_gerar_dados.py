@@ -72,6 +72,28 @@ def test_caprichar_vira_obs_em_acompanhamento():
         assert any(i["obs"] == "caprichar" and i["qtd"] == 1 for i in e["pedido"]["itens"])
 
 
+def test_v4_tem_maiusculas_e_ponto_final_em_boa_parte_das_mensagens():
+    msgs = [e["mensagem"] for e in gerar(1000, seed=31)]
+    com_maiuscula = sum(m[:1].isupper() for m in msgs)
+    com_ponto_final = sum(m.rstrip()[-1:] in ".!?" for m in msgs)
+    assert 250 < com_maiuscula < 750      # ~metade em caixa de frase
+    assert com_ponto_final > 250          # pontuação no fim aparece bastante
+
+
+def test_reclamacao_com_rua_nao_vira_endereco():
+    exs = gerar(3000, seed=17)
+    rec = [e for e in exs if e["pedido"]["itens"] == [] and any(
+        k in e["mensagem"].lower() for k in ("saiu pra entrega", "cadê meu pedido", "tá demorando"))]
+    assert rec and all(e["pedido"]["endereco"] is None for e in rec)
+
+
+def test_troco_abreviado_continua_sendo_dinheiro():
+    exs = gerar(3000, seed=19)
+    t = [e for e in exs if ("troco p 100" in e["mensagem"].lower() or "troco p/ 50" in e["mensagem"].lower())
+         and e["pedido"]["pagamento"]]
+    assert t and all(e["pedido"]["pagamento"] == "dinheiro" for e in t)
+
+
 def test_mensagens_proibidas_nao_aparecem():
     base = gerar(200, seed=2)
     proib = frozenset(e["mensagem"] for e in base)

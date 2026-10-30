@@ -26,7 +26,8 @@ FASE_C14 = [  # cardápio de 14 itens (v1, v2)
 ]
 FASE_C17 = [  # cardápio de 17 itens (v3 em diante)
     ("baseline_base", "Qwen 1.5B\nsem treino", "#9aa0a6"),
-    ("lora_qwen_v3", "Qwen + LoRA\nv3", "#2f6fdb"),
+    ("lora_qwen_v3", "Qwen + LoRA\nv3", "#7aa7e8"),
+    ("lora_qwen_v4", "Qwen + LoRA\nv4", "#2f6fdb"),
     ("baseline_claude", "Claude Haiku\n(API)", "#e08a3c"),
     ("baseline_claude_regras", "Claude Haiku\n+ regras", "#c2611b"),
 ]

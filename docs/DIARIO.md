@@ -161,6 +161,11 @@ Ressalvas honestas:
 - Latência: v3 local 3,4 s contra 1,6 s do Claude (inferência local ainda sem otimização).
 - Custo: v3 roda na própria GPU, sem custo por mensagem; Claude com regras custa cerca de US$ 0,19 por 1.000 mensagens.
 
+### 12. v4 (em andamento)
+Mudanças nos dados: pontuação variada (ponto, reticências, exclamação, quebra de linha), metade das mensagens em caixa de frase, reclamações com rua sem endereço no gabarito, "troco p 100". 3.000 exemplos. O critério de aceitação foi fixado em `src/robustez.py` antes de qualquer resultado.
+Ocorrências: o primeiro treino ficou lento (a placa estava dividida com outros programas, memória em 15,9 de 16 GB), foi suspenso, e o processo congelado acabou encerrado pelo app, perdendo o progresso (o script ainda não tinha checkpoint). O script agora salva a cada 50 passos e aceita `--retomar`. O segundo treino foi interrompido por escolha na época ~1 de 3, com checkpoint salvo. Ver `docs/PROXIMOS_PASSOS.md`.
+Lição de engenharia: treinos longos precisam de checkpoint desde o primeiro disparo.
+
 ## Decisões técnicas
 - **LoRA em bf16**, não QLoRA: o Qwen 1.5B ocupa ~3 GB e a GPU tem 16 GB; comprimir em 4 bits só vale se o modelo não couber.
 - **Prompt curto no treino** ("Extraia o pedido da mensagem em JSON."): o cardápio é aprendido nos pesos, o que reduz tokens por chamada.
