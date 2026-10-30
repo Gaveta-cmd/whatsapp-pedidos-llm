@@ -8,8 +8,10 @@ Atualizado em 30/10/2026. Material de apoio para o README e para o post. Todos o
 - `02_terminal_testes.png`: 19 testes automáticos passando
 - `03_erros_modelo_v1.png`: onde o modelo v1 errou nas mensagens escritas à mão (JSON inválido, "1 de cada", "capricha")
 - `04_terminal_resultados.png`: tabela de resultados
-- `05_prova_final.png`: prova final com 20 mensagens novas (modelo treinado vs Claude)
-- `06_erros_prova_final.png`: principais erros do modelo na prova final
+- `05_prova_final_v2.png`: prova final do v2 (cardápio de 14 itens), 20 mensagens novas
+- `06_erros_prova_final.png`: principais erros do v2 na prova final
+- `07_prova_final_v3.png`: prova final do v3 (cardápio de 17 itens), 20 mensagens novas
+- `08_comparacao_modelos_v3.png`: teste sintético da fase 2 (cardápio de 17 itens)
 Os "prints de terminal" são gerados por `src/gerar_prints.py` a partir da saída real e passam por um filtro que remove chaves, e-mails e caminhos do computador.
 
 ## O problema
@@ -108,6 +110,56 @@ Erros do Claude: #4 (aplicou "caprichar" a todos os espetinhos; o gabarito, disc
 Honestidade sobre o protocolo: o conteúdo dessas 20 mensagens foi exibido ao Claude automaticamente pelo editor antes da execução. Nenhum dado, treino ou schema foi alterado em função delas, e o gabarito foi escrito antes de rodar qualquer modelo.
 
 Conclusão: o fine-tuning ensina o formato e o vocabulário do cardápio (99% no teste sintético contra 30% na prova final mostra o tamanho do buraco), mas os dados precisam cobrir os casos reais: mensagens sem pedido, produtos que não existem, e mais variedade de sintaxe. Sem isso, o Claude via API é muito mais confiável.
+
+### 9. v3: cardápio de 17 itens e casos que faltavam
+Decisão de negócio: o cardápio ganhou espetinho de picanha, porção de arroz e porção de feijão (17 itens). "1 de cada acompanhamento" = um de cada acompanhamento do cardápio. Por isso os resultados são separados em duas fases (cardápio de 14 itens: v1 e v2; cardápio de 17 itens: v3), cada uma com o seu teste sintético. Os resultados antigos ficam com sufixo `_c14`.
+
+O gerador do v3 passou a incluir: mensagens sem pedido (resposta com itens vazio), menções a produtos fora do cardápio (ignorados), "de cada acompanhamento", quantidade depois do produto ("linguiça 2"), frases condicionais e endereços em formatos variados. 2.465 exemplos de treino.
+
+Teste sintético novo (100 mensagens, mais difícil que o antigo):
+
+| | JSON válido | Acerto exato | Latência | Custo / 1.000 msgs |
+|---|---|---|---|---|
+| Qwen sem treino | 92% | 15% | 4,8 s | ~zero |
+| **Qwen + LoRA v3** | 99% | **97%** | 3,4 s | ~zero |
+| Claude Haiku sem regras | 100% | 80% | 1,6 s | US$ 0,16 |
+| Claude Haiku com regras | 100% | 90% | 1,6 s | US$ 0,19 |
+
+Imagem: `08_comparacao_modelos_v3.png`. Lembrete: este teste vem do mesmo gerador do treino.
+
+### 10. Um defeito do v3: a pontuação
+Nas 40 mensagens escritas à mão, o v3 concordou com o Claude em apenas 24/40 (o v2: 37/40 contra as mesmas respostas). Em 16 mensagens o v3 deixou um item de fora, quase sempre uma bebida no fim do pedido.
+Experimento (mesmas 40 mensagens, quatro formas):
+
+| Forma da mensagem | v3 | v2 |
+|---|---|---|
+| Original | 24/40 | 37/40 |
+| Tudo em minúsculas | 27/40 | 37/40 |
+| Sem pontuação | 34/40 | 35/40 |
+| Minúsculas e sem pontuação | 36/40 | 35/40 |
+
+A causa principal é a pontuação, não as maiúsculas. Hipótese (não provada): os exemplos novos com perguntas ("?") e frases soltas ensinaram o v3 a tratar o que vem depois de um ponto como conversa à parte, descartando o item logo antes dele. Correção planejada para o v4: treinar com pontuação e maiúsculas muito variadas e usar esse mesmo experimento como teste de aceitação (concordância parecida nas quatro formas).
+
+### 11. Prova final do v3: 20 mensagens novas
+O v3 foi treinado antes de as mensagens existirem. O gabarito foi escrito antes de rodar os modelos, com alternativas aceitas nos casos ambíguos. Critério estrito: endereço comparado literalmente. 17 mensagens com pedido e 3 sem pedido.
+
+| | Acerto exato | Com pedido (17) | Sem pedido (3) |
+|---|---|---|---|
+| Qwen + LoRA v3 | 15/20 (75%) | 13/17 | 2/3 |
+| Claude sem regras | 14/20 (70%) | 12/17 | 2/3 |
+| Claude com regras | 15/20 (75%) | 12/17 | 3/3 |
+
+Imagem: `07_prova_final_v3.png`. A diferença entre o v3 e o Claude é de uma mensagem em 20, então é um empate técnico, não uma vitória.
+
+Erros do v3 (5): (1) numa reclamação sem pedido ("meu pedido da rua 12 já saiu?"), copiou "rua 12" como endereço; (2) "capricha no ponto da carne, bem mal passada": escreveu `caprichar` em vez de `mal passado`; (3) "1 de cada acompanhamento": devolveu 4 dos 6 acompanhamentos, faltaram arroz e feijão (itens mais novos); (4) deixou de fora "1 agua sem gas" no fim do pedido (o defeito de bebidas, mesmo sem pontuação); (5) "troco p 100": respondeu pagamento pix em vez de dinheiro.
+Erros do Claude com regras (5): reformata endereços ("Condomínio Residencial Flores, apto 301" para "cond residencial flores apto 301"), o que o critério literal pune; esqueceu o pão de alho num "1 de cada" de 12 itens; e interpretou "capricha" de forma diferente do gabarito em 2 mensagens.
+
+Ressalvas honestas:
+- 20 mensagens é pouco: cada mensagem vale 5 pontos percentuais.
+- Esse lote foi escrito em minúsculas e quase sem pontuação, o estilo em que o v3 vai melhor (ver seção 10). O lote anterior, mais pontuado, deu 24/40. O resultado depende do estilo de escrita, e é isso que o v4 deve corrigir.
+- O conteúdo das mensagens foi lido por mim para escrever o gabarito, depois do treino do v3; nenhum dado ou treino foi alterado a partir delas.
+- Latência: v3 local 3,4 s contra 1,6 s do Claude (inferência local ainda sem otimização).
+- Custo: v3 roda na própria GPU, sem custo por mensagem; Claude com regras custa cerca de US$ 0,19 por 1.000 mensagens.
 
 ## Decisões técnicas
 - **LoRA em bf16**, não QLoRA: o Qwen 1.5B ocupa ~3 GB e a GPU tem 16 GB; comprimir em 4 bits só vale se o modelo não couber.

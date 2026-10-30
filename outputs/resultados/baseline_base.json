@@ -1,13 +1,13 @@
 {
   "n": 100,
-  "json_valido": 0.99,
-  "acerto_exato": 0.28,
-  "f1_produto_qtd": 0.744,
-  "f1_produto_qtd_obs": 0.668,
-  "acc_endereco": 0.91,
-  "acc_pagamento": 0.65,
+  "json_valido": 0.92,
+  "acerto_exato": 0.15,
+  "f1_produto_qtd": 0.6320166320166319,
+  "f1_produto_qtd_obs": 0.5280665280665281,
+  "acc_endereco": 0.78,
+  "acc_pagamento": 0.42,
   "modelo": "Qwen/Qwen2.5-1.5B-Instruct",
-  "latencia_media_s": 5.329234605000238,
-  "latencia_p95_s": 8.857405500020832,
+  "latencia_media_s": 4.757053589998395,
+  "latencia_p95_s": 7.999817899981281,
   "gpu": "NVIDIA GeForce RTX 5060 Ti"
 }

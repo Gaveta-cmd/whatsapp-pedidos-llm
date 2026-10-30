@@ -1,6 +1,6 @@
 {
   "resumo": {
-    "lora_v2": {
+    "lora_v3": {
       "acerto_exato": "17/20",
       "com_pedido": "14/17",
       "sem_pedido": "3/3",
@@ -21,7 +21,7 @@
   },
   "erros": [
     {
-      "modelo": "lora_v2",
+      "modelo": "lora_v3",
       "n": 9,
       "mensagem": "Mestre capricha no alho do pao viu, me ve 2 pao de alho, 2 boi, 1 mandioca e traz molho de maionese caseira tb",
       "nota": "maionese fora do cardapio",
@@ -29,7 +29,7 @@
       "obtido": "2x pão de alho; 2x espetinho de carne; 1x porção de mandioca frita | end=None | pag=None"
     },
     {
-      "modelo": "lora_v2",
+      "modelo": "lora_v3",
       "n": 12,
       "mensagem": "manda 2 de frango e 1 coca 2lpera adiciona mais 2 queijo coalho e 1 mandioca frita troco p 100 reais blz",
       "nota": "duas mensagens coladas; troco = dinheiro",
@@ -37,7 +37,7 @@
       "obtido": "JSON INVALIDO"
     },
     {
-      "modelo": "lora_v2",
+      "modelo": "lora_v3",
       "n": 17,
       "mensagem": "capricha na farofa mano, me ve 2 de boi, 2 de frango, 1 picanha, e 1 porçao de arroz. Pix",
       "nota": "picanha e arroz no cardapio",
