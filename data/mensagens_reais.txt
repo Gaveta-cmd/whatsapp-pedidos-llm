@@ -1,0 +1,84 @@
+# Escreva aqui, UMA MENSAGEM POR LINHA, pedidos do jeito que seus clientes realmente mandam.
+# Linhas que começam com # são ignoradas. Misture: gíria, erro de digitação, pedido bagunçado,
+# coisas que NÃO estão no cardápio, mensagens sem pedido ("qual o horário?"), endereço, forma de pagamento.
+# Meta: 30 a 50 linhas. Salve com Ctrl+S quando terminar e me avise.
+# Exemplos (apague e troque pelos seus):
+Boa noite chef, me vê 2 de carne e 1 de frango. Manda uma farofa tb. Pagamento no pix blz?
+
+Opa boa noite, vcs entregam aqui no centro? Queria 3 espeto de boi, 2 queijo coalho e uma coca 2l.
+
+Fala irmao blz, me manda 2 de linguica 2 de coracao e 1 mandioca frita. Vou pagar no debito na maquininha.
+
+Queria pedir 4 espetinhos de carne 2 pao de alho e um suco de laranja. Quanto tempo pra entregar?
+
+Boa tarde, manda pra mim no pix 2 espeto de frango 1 de coracao e um vinagrete. Qnt fica a taxa pra rua 15?
+
+Eai mestre, capricha ai no assado. Queria 3 de carne bem passada, 2 queijo e uma guaraná lata. Pagar no dinheiro, preciso de troco pra 50.
+
+Me vê 5 espetinho de boi, 2 mandioca, 1 farofa e uma coca de 2 litros. Manda a chave pix de vcs.
+
+Fala chefe, manda 2 espeto de linguica 2 de frango e 1 pao de alho por favor. Pagamento no cartão de crédito.
+
+Boa noite vcs tao entregando hj? Quero 3 de coracao 1 de carne e uma agua sem gas.
+
+Eai blz? Me ve 2 espeto de queijo coalho 2 de frango e uma coca lata. Troco pra 100 no dinheiro.
+
+Manda ai 4 carne 4 linguica 2 vinagrete e 1 coca 2l. Passa o pix ai que ja transfiro.
+
+Salve irmao, me ve 3 frango, 2 coracao, 1 pao de alho e um suco. Credito na entrega por favor.
+
+Opa, vou querer 2 espetinho de carne, 1 mandioca frita e um guarana lata. Qual a chave do pix?
+
+Boa noite, me ve 1 de cada espetinho pra experimentar, 1 vinagrete e uma coca lata. Debito.
+
+Fala chefe manda 3 de boi bem passado 2 pao de alho e uma coca 2 litros pra rua das flores 123.
+
+Eai rapaziada, 2 espeto de linguica, 2 de queijo, 1 farofa. Paga no pix, manda o qr code.
+
+Boa tarde, vcs tem entrega agora? Queria 2 frango 2 carne e uma agua.
+
+Opa boa noite meu consagrado, manda 5 espetinho de coracao 1 mandioca frita e um guarana lata. Maquininha no credito.
+
+Manda pra mim 3 de carne, 2 de frango, 1 vinagrete, 1 farofa e 1 coca 2l. Pagamento em dinheiro, sem troco.
+
+Fala mestre, me ve 2 coalho 2 linguica e um pao de alho. Manda chave pix p favor.
+
+Boa noite, 4 espeto de carne, 2 mandioca e duas coca lata. Quanto fica tudo? Pagar no debito.
+
+Eai, faz uma entrega aqui p mim. 3 de frango 3 de coracao e um suco de laranja. Manda o pix.
+
+Salve, me manda 2 de boi 2 de queijo e 1 vinagrete. Capricha na farofa pfv. Cartao de credito.
+
+Opa, boa noite. Vcs aceita pix ne? Vou querer 2 espeto de linguica 1 pao de alho e uma coca 2l.
+
+Me ve 3 espetinho de coracao 2 de frango e uma mandioca frita. Vou pagar no dinheiro troco pra 50.
+
+Fala chefe, boa tarde. Quero 4 espeto de boi 1 vinagrete e uma agua sem gas. Pagar no debito.
+
+Boa noite rapaziada manda 2 carne 2 frango 2 queijo coalho e uma coca lata. Manda o pix de vcs.
+
+Eai blz? Vou querer 3 espeto de linguica, 1 mandioca, 1 pao de alho e um guarana lata. Credito na maquininha.
+
+Opa me ve 5 espetinho de carne bem passado e 2 farofa. Pagar no pix, manda ai.
+
+Fala mestre, boa noite. Manda 2 frango 2 coracao 1 vinagrete e 1 suco de laranja. Dinheiro, troco p 100.
+
+Queria pedir 3 queijo coalho, 2 pao de alho e uma coca 2 litros. Aceita cartão de débito na entrega?
+
+Eai irmao, manda 4 de carne, 1 mandioca frita e uma coca lata. Chave pix por favor.
+
+Salve chefe, 2 de linguica 2 de coracao 2 de queijo e 1 farofa. Vou pagar no pix, qual e a chave?
+
+Boa noite, 3 espeto de frango, 1 vinagrete, 1 pao de alho e um guarana. Maquininha no credito blz?
+
+Opa me vê 2 de boi 2 de frango 1 mandioca e uma agua sem gas. Manda a conta do pix.
+
+Fala rapaziada, me manda 4 de coracao 2 pao de alho e uma coca 2l. Vou pagar em dinheiro certinho.
+
+Boa noite chefe, manda 3 espetinho de carne 1 queijo coalho e 1 suco de laranja. Debito na entreg.
+
+Eai blz, me ve 2 de linguica, 2 de boi, 1 farofa, 1 vinagrete. Manda a chave do pix pra eu pagar.
+
+Salve mestre, 3 frango 2 queijo 1 mandioca frita e um guarana lata. Cartão de credito na entrega.
+
+Opa boa noite, manda 5 espetinho de boi bem passado 1 pao de alho e uma coca 2l. Chave pix p favor.

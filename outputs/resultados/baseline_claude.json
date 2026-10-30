@@ -1,0 +1,18 @@
+{
+  "n": 100,
+  "json_valido": 1.0,
+  "acerto_exato": 0.8,
+  "f1_produto_qtd": 0.9942857142857143,
+  "f1_produto_qtd_obs": 0.9600000000000001,
+  "acc_endereco": 0.92,
+  "acc_pagamento": 0.99,
+  "modelo": "claude-haiku-5-5",
+  "latencia_media_s": 1.6331418849996409,
+  "latencia_p95_s": 2.708767000003718,
+  "tokens_entrada_total": 53876,
+  "tokens_saida_total": 20714,
+  "motivos_de_parada": {
+    "end_turn": 100
+  },
+  "custo_por_1000_msgs_usd": 0.157446
+}

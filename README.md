@@ -1,0 +1,40 @@
+# Extrator de pedidos de WhatsApp com LLM ajustado (LoRA)
+
+> **Status: em andamento.** Este README é provisório; os resultados finais e o modelo no Hugging Face ainda não foram publicados.
+> A história completa, com erros e correções, está em [docs/DIARIO.md](docs/DIARIO.md).
+
+Transforma uma mensagem livre de cliente em um pedido estruturado (JSON) para um espetinho:
+
+```
+"boa noite, quero 2 espetinho de carne, 1 de frango sem farofa e uma coca lata"
+→ {"itens":[{"produto":"espetinho de carne","qtd":2,"obs":null},
+            {"produto":"espetinho de frango","qtd":1,"obs":"sem farofa"},
+            {"produto":"coca-cola lata","qtd":1,"obs":null}],"endereco":null,"pagamento":null}
+```
+
+Uma lista de itens vazia significa que a mensagem **não é um pedido** (pergunta, saudação, reclamação).
+
+## O que tem aqui
+| Pasta/arquivo | Para quê |
+|---|---|
+| `src/schema.py` | Schema Pydantic do pedido (a "régua" de validação) |
+| `src/gerar_dados.py` | Gerador de dados sintéticos a partir do cardápio (`data/cardapio.json`) |
+| `src/treinar.py` | Fine-tuning com LoRA (Qwen2.5-1.5B-Instruct) |
+| `src/avaliar*.py`, `baseline_*.py` | Métricas e comparação com o modelo sem treino e com o Claude (API) |
+| `docs/` | Diário do projeto e imagens de evidência |
+| `outputs/resultados/` | Números e respostas de cada avaliação |
+
+## Lições até agora
+- Dados sintéticos davam 99% no teste do mesmo gerador, mas **30% em mensagens novas**: o modelo aprendeu o estilo do gerador, não o problema. Ver o diário.
+- O gabarito da prova final foi escrito **antes** de rodar os modelos.
+- Cardápio fixo: o modelo "sabe" o cardápio porque aprendeu no treino; se o cardápio mudar, precisa retreinar.
+
+## Como rodar
+```bash
+pip install torch --index-url https://download.pytorch.org/whl/cu128
+pip install -r requirements.txt
+python src/gerar_dados.py --n 2850 --seed 42
+python src/treinar.py --epocas 3
+python -m pytest tests
+```
+Para os baselines com o Claude, crie um arquivo `.env` com `ANTHROPIC_API_KEY=...` (o arquivo é ignorado pelo git).

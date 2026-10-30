@@ -1,0 +1,27 @@
+{
+  "espetinhos": [
+    {"produto": "espetinho de carne", "apelidos": ["espetinho de carne", "espeto de carne", "carne", "espetinho carne", "espetinho de boi"]},
+    {"produto": "espetinho de frango", "apelidos": ["espetinho de frango", "espeto de frango", "frango", "espetinho frango"]},
+    {"produto": "espetinho de linguiça", "apelidos": ["espetinho de linguiça", "linguiça", "linguica", "espeto de linguiça", "espetinho de linguica"]},
+    {"produto": "espetinho de coração", "apelidos": ["espetinho de coração", "coração", "coracao", "espeto de coração"]},
+    {"produto": "espetinho de queijo coalho", "apelidos": ["espetinho de queijo coalho", "queijo coalho", "coalho", "espeto de queijo"]},
+    {"produto": "espetinho de picanha", "apelidos": ["espetinho de picanha", "espeto de picanha", "picanha", "espetinho picanha"]}
+  ],
+  "acompanhamentos": [
+    {"produto": "porção de farofa", "apelidos": ["porção de farofa", "farofa", "porcao de farofa"]},
+    {"produto": "porção de vinagrete", "apelidos": ["porção de vinagrete", "vinagrete", "porcao de vinagrete"]},
+    {"produto": "pão de alho", "apelidos": ["pão de alho", "pao de alho"]},
+    {"produto": "porção de mandioca frita", "apelidos": ["porção de mandioca frita", "porção de mandioca", "mandioca", "mandioca frita"]},
+    {"produto": "porção de arroz", "apelidos": ["porção de arroz", "porcao de arroz", "arroz"]},
+    {"produto": "porção de feijão", "apelidos": ["porção de feijão", "porcao de feijao", "feijão", "feijao"]}
+  ],
+  "bebidas": [
+    {"produto": "coca-cola lata", "apelidos": ["coca-cola lata", "coca lata", "coca", "coca cola lata", "lata de coca"]},
+    {"produto": "guaraná lata", "apelidos": ["guaraná lata", "guarana lata", "guaraná", "guarana", "lata de guaraná"]},
+    {"produto": "coca-cola 2l", "apelidos": ["coca-cola 2l", "coca 2l", "coca de 2 litros", "coca 2 litros", "coca de 2l"]},
+    {"produto": "água sem gás", "apelidos": ["água sem gás", "agua sem gas", "água", "agua"]},
+    {"produto": "suco de laranja", "apelidos": ["suco de laranja", "suco", "laranja"]}
+  ],
+  "pagamentos": ["pix", "dinheiro", "cartão de crédito", "cartão de débito"],
+  "observacoes_comuns": ["sem farofa", "sem vinagrete", "bem passado", "ao ponto", "mal passado", "sem pimenta", "com pimenta", "sem gelo", "bem gelada", "sem cebola"]
+}

@@ -1,0 +1,46 @@
+# PROVA FINAL: 20 mensagens NOVAS, uma por linha. Linhas com # são ignoradas.
+# Regras para a prova valer:
+#   1) escreva mensagens diferentes das 40 anteriores (outro jeito de falar, outros erros, outra ordem);
+#   2) NÃO me mostre estas mensagens antes de rodar o teste, e eu não vou mexer em nada depois de ver o resultado;
+#   3) misture: pedido simples, pedido bagunçado, algo fora do cardápio, mensagem sem pedido,
+#      endereço, forma de pagamento, "capricha", "1 de cada", duas mensagens coladas.
+# Salve com Ctrl+S quando terminar e me avise.
+Mano boa noite, entrega na quadra 10 conjunto 3 casa 8? Quero 2 espeto de boi e uma coca lata no pix
+
+ae vcs tem batata frita e cerveja heineken gelada? Manda tb 2 de frango e 1 pao de alho
+
+Boa noite parceiro até q horas vcs ficam abertos hj?
+
+Opa, capricha bastante ai, manda 1 de cada espetinho do cardapio e uma coca de 2 litros, vou pagar no credito
+
+eai,, me manda ai linguiça 2 e coraçao 3,,, vinagrete tbm... e 1 agua,, debito vlw
+
+oa noite vcs entregam aqui no setor sul?ah esquece manda 4 de carne 2 coalho e 1 mandioca frita q vou buscar no pix
+
+fala devia ter pastel ne kkkk me ve 2 espeto de picanha e 1 suco de laranja no dinheiro
+
+Endereço rua das palmeiras num 45, os pedido eh: 3 frango, 2 farofa, 1 guarana. Pagar na maquininha debito
+
+Mestre capricha no alho do pao viu, me ve 2 pao de alho, 2 boi, 1 mandioca e traz molho de maionese caseira tb
+
+boa noite irmaozinho, só 3 espetinho de coraçao e 1 vinagrete pro pix ok? manda a chave
+
+fala mestre qual o endereço do espetinho pra eu ir ai comer no balcao?
+
+manda 2 de frango e 1 coca 2lpera adiciona mais 2 queijo coalho e 1 mandioca frita troco p 100 reais blz
+
+Tem espeto de cupim e cerveja skol lata? Se n tiver manda 3 de linguiça e 1 coca lata no pix
+
+Quero 1 de cada acompanhamento e 2 espetinho de carne pra entregar na rua 8 bloco B apto 202, cartão de credito
+
+Bao noit, me ve 2 espeto d frang, 2 d queijo coalh e 1 guara lata. Pagamen no debito
+
+fala parceiro vi o cardapio aqui vcs aceitam vale refeicao ou sodexo?
+
+capricha na farofa mano, me ve 2 de boi, 2 de frango, 1 picanha, e 1 porçao de arroz. Pix
+
+Opa boa noite vcs tem entrega pra agr?manda 3 espeto de coracao 2 pao de alho 1 suco de laranja pagamento no pix
+
+ve ai p mim 4 linguica, 2 mandioca, 1 coca de 2 litros... entregar na av central lote 12, pago no dinheiro, troco pra 50
+
+fala chefia me ve 1 de cada espeto que vcs tem ai e 1 red bull. pix pfv

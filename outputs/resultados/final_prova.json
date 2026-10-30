@@ -1,0 +1,104 @@
+{
+  "resumo": {
+    "lora_v2": {
+      "acerto_exato": "17/20",
+      "com_pedido": "14/17",
+      "sem_pedido": "3/3",
+      "json_valido": "19/20"
+    },
+    "claude_sem_regras": {
+      "acerto_exato": "17/20",
+      "com_pedido": "14/17",
+      "sem_pedido": "3/3",
+      "json_valido": "20/20"
+    },
+    "claude_com_regras": {
+      "acerto_exato": "16/20",
+      "com_pedido": "13/17",
+      "sem_pedido": "3/3",
+      "json_valido": "20/20"
+    }
+  },
+  "erros": [
+    {
+      "modelo": "lora_v2",
+      "n": 9,
+      "mensagem": "Mestre capricha no alho do pao viu, me ve 2 pao de alho, 2 boi, 1 mandioca e traz molho de maionese caseira tb",
+      "nota": "maionese fora do cardapio",
+      "esperado": "2x pão de alho [caprichar]; 2x espetinho de carne; 1x porção de mandioca frita | end=None | pag=None",
+      "obtido": "2x pão de alho; 2x espetinho de carne; 1x porção de mandioca frita | end=None | pag=None"
+    },
+    {
+      "modelo": "lora_v2",
+      "n": 12,
+      "mensagem": "manda 2 de frango e 1 coca 2lpera adiciona mais 2 queijo coalho e 1 mandioca frita troco p 100 reais blz",
+      "nota": "duas mensagens coladas; troco = dinheiro",
+      "esperado": "2x espetinho de frango; 1x coca-cola 2l; 2x espetinho de queijo coalho; 1x porção de mandioca frita | end=None | pag=dinheiro",
+      "obtido": "JSON INVALIDO"
+    },
+    {
+      "modelo": "lora_v2",
+      "n": 17,
+      "mensagem": "capricha na farofa mano, me ve 2 de boi, 2 de frango, 1 picanha, e 1 porçao de arroz. Pix",
+      "nota": "picanha e arroz no cardapio",
+      "esperado": "1x porção de farofa [caprichar]; 2x espetinho de carne; 2x espetinho de frango; 1x espetinho de picanha; 1x porção de arroz | end=None | pag=pix",
+      "obtido": "2x espetinho de carne; 2x espetinho de frango; 1x espetinho de picanha; 1x porção de arroz | end=None | pag=pix"
+    },
+    {
+      "modelo": "claude_sem_regras",
+      "n": 8,
+      "mensagem": "Endereço rua das palmeiras num 45, os pedido eh: 3 frango, 2 farofa, 1 guarana. Pagar na maquininha debito",
+      "nota": "endereco literal",
+      "esperado": "3x espetinho de frango; 2x porção de farofa; 1x guaraná lata | end=rua das palmeiras num 45 | pag=cartão de débito",
+      "obtido": "3x espetinho de frango; 2x porção de farofa; 1x guaraná lata | end=Rua das Palmeiras, 45 | pag=cartão de débito"
+    },
+    {
+      "modelo": "claude_sem_regras",
+      "n": 9,
+      "mensagem": "Mestre capricha no alho do pao viu, me ve 2 pao de alho, 2 boi, 1 mandioca e traz molho de maionese caseira tb",
+      "nota": "maionese fora do cardapio",
+      "esperado": "2x pão de alho [caprichar]; 2x espetinho de carne; 1x porção de mandioca frita | end=None | pag=None",
+      "obtido": "2x pão de alho [capricha no alho]; 2x espetinho de carne; 1x porção de mandioca frita | end=None | pag=None"
+    },
+    {
+      "modelo": "claude_sem_regras",
+      "n": 17,
+      "mensagem": "capricha na farofa mano, me ve 2 de boi, 2 de frango, 1 picanha, e 1 porçao de arroz. Pix",
+      "nota": "picanha e arroz no cardapio",
+      "esperado": "1x porção de farofa [caprichar]; 2x espetinho de carne; 2x espetinho de frango; 1x espetinho de picanha; 1x porção de arroz | end=None | pag=pix",
+      "obtido": "2x espetinho de carne; 2x espetinho de frango; 1x espetinho de picanha; 1x porção de arroz; 1x porção de farofa [capricha] | end=None | pag=pix"
+    },
+    {
+      "modelo": "claude_com_regras",
+      "n": 4,
+      "mensagem": "Opa, capricha bastante ai, manda 1 de cada espetinho do cardapio e uma coca de 2 litros, vou pagar no credito",
+      "nota": "'capricha bastante' generico, sem item: obs null",
+      "esperado": "1x espetinho de carne; 1x espetinho de frango; 1x espetinho de linguiça; 1x espetinho de coração; 1x espetinho de queijo coalho; 1x espetinho de picanha; 1x coca-cola 2l | end=None | pag=cartão de crédito",
+      "obtido": "1x espetinho de carne [caprichar]; 1x espetinho de coração [caprichar]; 1x espetinho de frango [caprichar]; 1x espetinho de linguiça [caprichar]; 1x espetinho de picanha [caprichar]; 1x espetinho de queijo coalho [caprichar]; 1x coca-cola 2l | end=None | pag=cartão de crédito"
+    },
+    {
+      "modelo": "claude_com_regras",
+      "n": 8,
+      "mensagem": "Endereço rua das palmeiras num 45, os pedido eh: 3 frango, 2 farofa, 1 guarana. Pagar na maquininha debito",
+      "nota": "endereco literal",
+      "esperado": "3x espetinho de frango; 2x porção de farofa; 1x guaraná lata | end=rua das palmeiras num 45 | pag=cartão de débito",
+      "obtido": "3x espetinho de frango; 2x porção de farofa; 1x guaraná lata | end=Rua das Palmeiras, 45 | pag=cartão de débito"
+    },
+    {
+      "modelo": "claude_com_regras",
+      "n": 14,
+      "mensagem": "Quero 1 de cada acompanhamento e 2 espetinho de carne pra entregar na rua 8 bloco B apto 202, cartão de credito",
+      "nota": "'de cada acompanhamento' (so treinou de cada espetinho)",
+      "esperado": "1x porção de farofa; 1x porção de vinagrete; 1x pão de alho; 1x porção de mandioca frita; 1x porção de arroz; 1x porção de feijão; 2x espetinho de carne | end=rua 8 bloco B apto 202 | pag=cartão de crédito",
+      "obtido": "1x porção de arroz; 1x porção de farofa; 1x porção de feijão; 1x porção de mandioca frita; 1x porção de vinagrete; 2x espetinho de carne | end=rua 8 bloco B apto 202 | pag=cartão de crédito"
+    },
+    {
+      "modelo": "claude_com_regras",
+      "n": 19,
+      "mensagem": "ve ai p mim 4 linguica, 2 mandioca, 1 coca de 2 litros... entregar na av central lote 12, pago no dinheiro, troco pra 50",
+      "nota": "endereco sem numero",
+      "esperado": "4x espetinho de linguiça; 2x porção de mandioca frita; 1x coca-cola 2l | end=av central lote 12 | pag=dinheiro",
+      "obtido": "4x espetinho de linguiça; 2x porção de mandioca frita; 1x coca-cola 2l | end=Av Central, lote 12 | pag=dinheiro"
+    }
+  ]
+}

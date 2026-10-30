@@ -1,0 +1,13 @@
+# torch deve ser instalado com CUDA 12.8 para GPUs série 50 (RTX 5060 Ti):
+#   pip install torch --index-url https://download.pytorch.org/whl/cu128
+torch==2.11.0
+transformers==5.22.1
+peft==0.21.2
+accelerate==1.15.0
+datasets==5.1.0
+anthropic==2.3.0
+pydantic==2.14.2
+fastapi==0.162.0
+uvicorn==0.54.0
+matplotlib==3.11.2
+pytest==9.2.0

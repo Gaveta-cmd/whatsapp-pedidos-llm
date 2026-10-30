@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.pytest_cache/
+checkpoints/
+*.safetensors
+*.gguf
+*.bin
+*.log
+
+# outputs: guarda só os resultados (números e respostas), nunca pesos nem checkpoints
+outputs/*
+!outputs/resultados/
