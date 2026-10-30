@@ -14,6 +14,8 @@ Transforma uma mensagem livre de cliente em um pedido estruturado (JSON) para um
 
 Uma lista de itens vazia significa que a mensagem **não é um pedido** (pergunta, saudação, reclamação).
 
+> **Sobre o uso de IA:** este projeto foi desenvolvido com apoio de um assistente de IA (Claude Code). Os dados, as regras de negócio, o gabarito das provas e a análise dos resultados foram definidos e revisados por mim.
+
 ## O que tem aqui
 | Pasta/arquivo | Para quê |
 |---|---|
