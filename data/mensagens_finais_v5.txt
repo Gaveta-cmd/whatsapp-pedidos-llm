@@ -1,0 +1,40 @@
+# PROVA FINAL DO v5: escreva aqui de 15 a 20 mensagens NOVAS, uma por linha.
+# Linhas que começam com # são ignoradas. Escreva como cliente de verdade, com maiúsculas e pontuação (ponto, vírgula, interrogação).
+# Misture: pedidos com vários itens, com observação (sem farofa etc.), com endereço e pagamento, e 2 ou 3 mensagens que NÃO são pedido (pergunta, saudação, reclamação).
+# Não copie mensagens que já existem em outros arquivos. Salve (Ctrl+S) e me avise: eu escrevo o gabarito antes de rodar qualquer modelo.
+
+Boa noite! Vocês entregam no bairro Jardim América? Se sim, gostaria de saber o valor da taxa de entrega.
+
+Olá, boa noite. Meu pedido anterior veio sem o pão de alho que paguei, como podemos resolver?
+
+Boa tarde! Tudo bem por aí? Como faço para consultar o cardápio atualizado de vocês?
+
+Boa noite. Gostaria de pedir 3 espetinhos de carne bem passados, 2 de frango, 1 pão de alho e 1 Guaraná lata, por favor.
+
+Olá! Quero 2 espetinhos de queijo coalho, 1 de coração e 1 porção de mandioca frita (sem sal, por gentileza). Vou pagar no Pix.
+
+Favor enviar 4 espetinhos de linguiça, 1 porção de farofa e 1 Coca-Cola 2L para a Rua das Orquídeas, número 405. Pagamento no cartão de crédito na entrega.
+
+Boa noite. Me vê 2 espetos de boi, 2 de frango e 1 porção de vinagrete (por favor enviar o vinagrete separado). Manda o QR Code do Pix!
+
+Olá, gostaria de 1 espetinho de cada sabor do cardápio, 2 pães de alho e 1 suco de laranja bem gelado.
+
+Boa noite! Vou querer 3 espetinhos de coração, 1 mandioca frita, 1 farofa extra e 1 água sem gás. Entregar na Av. Brasil, nº 120, apto 42. Pagamento em dinheiro, preciso de troco para R$ 100,00.
+
+Olá, boa tarde. Por favor, 2 espetos de linguiça, 2 de carne (ao ponto para mal passada) e 1 Coca-Cola lata. Chave Pix é o número de telefone?
+
+Boa noite, pessoal! Gostaria de encomendar 5 espetinhos de frango, 2 porções de mandioca e 1 Coca 2L. Cartão de débito na entrega, por favor.
+
+Por gentileza, mandar 2 espetinhos de queijo coalho (bem tostados), 2 de carne e 1 suco de laranja sem açúcar.
+
+Olá! Favor enviar 3 espetos de coração e 1 porção de vinagrete para a Rua São Paulo, 88. Pagamento via Pix.
+
+Boa noite. Quero 2 espetinhos de linguiça, 2 de frango, 1 pão de alho e 1 farofa (sem vinagrete, por favor). Pago na maquininha no crédito.
+
+Boa noite, gostaria de pedir 4 espetinhos de boi, 1 mandioca frita crocante e 1 Guaraná lata.
+
+Olá, vocês têm previsão de quanto tempo demora a entrega para o centro hoje? Está muito movimentado?
+
+Boa noite. Me manda 2 espetos de queijo coalho, 2 de coração, 1 farofa e 1 Coca-Cola lata. Endereço: Rua XV de Novembro, 310. Dinheiro com troco para R$ 50,00.
+
+Olá! Manda 3 espetinhos de frango, 1 pão de alho e 1 suco de laranja. Vou pagar no Pix assim que confirmarem o valor total.
