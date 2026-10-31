@@ -1,7 +1,17 @@
 # Extrator de pedidos de WhatsApp com LLM ajustado (LoRA)
 
-> **Status: em andamento.** Este README é provisório; os resultados finais e o modelo no Hugging Face ainda não foram publicados.
-> A história completa, com erros e correções, está em [docs/DIARIO.md](docs/DIARIO.md). Estado atual (v5) e próximos passos: [docs/PROXIMOS_PASSOS.md](docs/PROXIMOS_PASSOS.md).
+> **Status: versão final = v5, com API.** Os pesos do adapter não estão publicados (ficam só na máquina de quem treinou); para reproduzir, veja "Como rodar".
+> A história completa, com erros e correções, está em [docs/DIARIO.md](docs/DIARIO.md). Pendências opcionais: [docs/PROXIMOS_PASSOS.md](docs/PROXIMOS_PASSOS.md).
+
+**Resumo dos resultados** (acerto exato; endereço comparado literalmente)
+
+| Teste | LoRA v5 | Claude Haiku + regras | Claude Haiku sem regras |
+|---|---|---|---|
+| 18 mensagens novas escritas à mão (prova final, gabarito commitado antes) | **17/18** | 16/18 | 15/18 |
+| 100 mensagens sintéticas (mesmo gerador do treino; o Claude não treinou nelas) | 98% | 90% | 80% |
+| Concordância com o Claude, 40 mensagens × 4 formas de escrita | 35 a 37 de 40 | — | — |
+
+É um **empate técnico** com o Claude nas mensagens à mão (1 a 2 mensagens de diferença em 18). Limitação conhecida: o modelo ainda pode perder o **último item** do pedido quando há uma frase de fechamento depois da lista (ex.: "Obrigado!"); isso aparece em cerca de 1 a cada 5 frases de um teste controlado (diário, seções 17 e 18).
 
 Transforma uma mensagem livre de cliente em um pedido estruturado (JSON) para um espetinho:
 
@@ -22,6 +32,7 @@ Uma lista de itens vazia significa que a mensagem **não é um pedido** (pergunt
 | `src/schema.py` | Schema Pydantic do pedido (a "régua" de validação) |
 | `src/gerar_dados.py` | Gerador de dados sintéticos a partir do cardápio (`data/cardapio.json`) |
 | `src/treinar.py` | Fine-tuning com LoRA (Qwen2.5-1.5B-Instruct) |
+| `src/api.py` | API FastAPI: `POST /extrair-pedido` com `{"mensagem": "..."}` devolve o pedido em JSON |
 | `src/avaliar*.py`, `baseline_*.py` | Métricas e comparação com o modelo sem treino e com o Claude (API) |
 | `docs/` | Diário do projeto e imagens de evidência |
 | `outputs/resultados/` | Números e respostas de cada avaliação |
@@ -38,8 +49,15 @@ Uma lista de itens vazia significa que a mensagem **não é um pedido** (pergunt
 ```bash
 pip install torch --index-url https://download.pytorch.org/whl/cu128
 pip install -r requirements.txt
-python src/gerar_dados.py --n 2850 --seed 42
-python src/treinar.py --epocas 3
+python src/gerar_dados.py --n 4000 --seed 42 --manter-teste --caixa v4 --pontuacao v3 --gemeos   # dados do v5
+python src/treinar.py --epocas 3                                                               # ~25 min numa RTX 5060 Ti
 python -m pytest tests
+uvicorn --app-dir src api:app --port 8000                                                      # sobe a API
 ```
+Exemplo de chamada (com o servidor no ar):
+```bash
+curl -X POST http://127.0.0.1:8000/extrair-pedido -H "Content-Type: application/json" \
+  -d '{"mensagem": "quero 2 espetinho de carne e uma coca lata, pago no pix"}'
+```
+Na máquina de desenvolvimento a primeira chamada leva ~19 s (carrega o modelo) e as seguintes ~1 s (medida informal, uma amostra).
 Para os baselines com o Claude, crie um arquivo `.env` com `ANTHROPIC_API_KEY=...` (o arquivo é ignorado pelo git).
