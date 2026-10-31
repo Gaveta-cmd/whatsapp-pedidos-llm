@@ -276,8 +276,42 @@ O Davi escreveu **18 mensagens novas** (4 sem pedido, 14 com pedido; bem pontuad
 - A diferença entre v5 (17), v3 (16) e Claude (15 e 16) é de **uma a duas mensagens em 18**. É empate técnico, não vitória. Não dá para dizer que o v5 "é melhor que o Claude".
 - A comparação com o v3 foi feita **depois** de ver o resultado do v5 (o gabarito já estava travado). O gabarito não mudou.
 - O ganho do v5 sobre o v3 que apareceu nas 40 mensagens com 4 formas de escrita (35 contra 24) **não se repetiu em tamanho** nesta prova: aqui o v3 já ia bem (16/18) porque as mensagens do Davi têm pontuação "comportada". Isso é coerente com o defeito do v3 ser mais forte em certos estilos, mas é uma explicação, não uma prova.
-- Os dois erros do v3 e o do v5 são o **mesmo item**: "Coca 2L" no fim do pedido. Observação para investigar (hipótese, não testada): talvez o problema seja específico desse produto ("2L", ou "Coca" sozinha sendo ambígua entre lata e 2L), e não só a pontuação. Não alterei dados nem treino depois de ver o resultado, como combinado.
+- Os dois erros do v3 e o do v5 são o **mesmo item**: "Coca 2L" no fim do pedido. Hipótese levantada: talvez o problema fosse específico desse produto ("2L", ou "Coca" sozinha sendo ambígua entre lata e 2L). **Testada e refutada no item 18.** Não alterei dados nem treino depois de ver o resultado, como combinado.
 - Uma execução de treino por modelo; 18 mensagens escritas por uma pessoa só.
+
+### 18. A hipótese da "Coca 2L" foi refutada (31/10)
+Depois da prova final, desconfiei que o erro restante fosse específico da Coca 2L. Teste controlado (`src/diagnosticar_item_final.py`, sem treino e sem API): 6 frases-molde novas (escritas por mim para este teste, não vêm das mensagens do Davi) × 9 últimos itens diferentes, trocando **só** o último item. Mede quantas vezes o modelo mantém o último item. Se a Coca 2L fosse o problema, ela perderia bem mais que os outros itens; não é o que aconteceu.
+
+| Último item mantido (de 6 frases cada) | v5 | v3 |
+|---|---|---|
+| 1 Coca 2L | 6 | 1 |
+| 1 Coca-Cola 2L | 6 | 4 |
+| 1 Coca de 2 litros | 4 | 0 |
+| 1 Coca-Cola lata | 4 | 3 |
+| 1 Guaraná lata | 4 | 0 |
+| 1 suco de laranja | 5 | 1 |
+| 1 água sem gás | 5 | 3 |
+| 1 pão de alho | 6 | 6 |
+| 1 farofa | 4 | 6 |
+| **total (de 54)** | **44 (81%)** | **24 (44%)** |
+
+| Por frase-molde (o que vem depois da lista) | v5 | v3 |
+|---|---|---|
+| "...e X. Obrigado!" | 3/9 | 2/9 |
+| "...e X. Pagamento no cartão de débito, por favor." | 6/9 | 2/9 |
+| "...e X. Vou pagar no Pix." | 8/9 | 4/9 |
+| "...e X." (nada depois) | 9/9 | 7/9 |
+| sem pontuação | 9/9 | 4/9 |
+| "...e X. Entregar na Rua das Flores, 55. Dinheiro..." | 9/9 | 5/9 |
+
+**O que isso mostra:**
+- **A Coca 2L não é o problema.** No v5 as duas formas literais ("Coca 2L" e "Coca-Cola 2L") foram mantidas 12 de 12; os itens perdidos estão espalhados (Guaraná, suco, água, farofa, Coca lata). Hipótese refutada.
+- O que concentra os erros do v5 é **o que vem depois da lista**: com "Obrigado!" logo depois, o v5 manteve o último item em só 3 de 9; com uma frase de pagamento ("..., por favor."), 6 de 9. Sem nada depois ou sem pontuação, 9 de 9. Em todos os erros só o último item some; os anteriores ficam.
+- **v5 contra v3, em frases que nenhum dos dois viu:** 44/54 contra 24/54 em manter o último item. É o melhor sinal até agora de que o v5 melhorou de verdade (diferente da prova de 18 mensagens, onde o v3 já ia bem).
+- O defeito **não foi eliminado**: o v5 ainda perde o último item em 19% destas frases quando vem uma frase de fechamento depois da lista, e perde especialmente com "Obrigado!". Verifiquei os dados de treino: "obrigado" aparece em 193 das 4.000 mensagens (191 no fim) e "valeu" em 440, então **não é falta de agradecimento nos dados**. Os exemplos que vi são "obrigado" solto, em minúscula e sem "!", depois de endereço ou pagamento; o teste usou "Obrigado!" com maiúscula e exclamação colado direto na lista. Qual desses detalhes pesa (ou se é só a combinação) não foi testado.
+- Ressalvas: seis moldes escritos por mim depois de ver os erros (então a escolha dos moldes foi guiada pelo problema), uma única execução de cada modelo, e a decodificação é determinística (sem sorteio), então não há "repetição" para tirar a média.
+
+**Consequência:** uma correção possível seria no gerador (fechamentos com maiúscula e "!" colados na lista, como "Obrigado!" e "Valeu!", e gêmeos deles), treinando um v6. Antes disso vale um teste barato que separa a maiúscula/exclamação do resto (mesmos moldes, variando só o fechamento). Isso exige uma prova nova com mensagens que o Davi ainda não escreveu, porque a prova atual já foi vista.
 
 ## Decisões técnicas
 - **LoRA em bf16**, não QLoRA: o Qwen 1.5B ocupa ~3 GB e a GPU tem 16 GB; comprimir em 4 bits só vale se o modelo não couber.

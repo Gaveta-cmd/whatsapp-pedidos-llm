@@ -1,0 +1,148 @@
+{
+  "por_ultimo_item": {
+    "1 Coca 2L": {
+      "n": 6,
+      "ultimo_presente": 6,
+      "todos_presentes": 6
+    },
+    "1 Coca-Cola 2L": {
+      "n": 6,
+      "ultimo_presente": 6,
+      "todos_presentes": 6
+    },
+    "1 Coca de 2 litros": {
+      "n": 6,
+      "ultimo_presente": 4,
+      "todos_presentes": 4
+    },
+    "1 Coca-Cola lata": {
+      "n": 6,
+      "ultimo_presente": 4,
+      "todos_presentes": 4
+    },
+    "1 Guaraná lata": {
+      "n": 6,
+      "ultimo_presente": 4,
+      "todos_presentes": 4
+    },
+    "1 suco de laranja": {
+      "n": 6,
+      "ultimo_presente": 5,
+      "todos_presentes": 5
+    },
+    "1 água sem gás": {
+      "n": 6,
+      "ultimo_presente": 5,
+      "todos_presentes": 5
+    },
+    "1 pão de alho": {
+      "n": 6,
+      "ultimo_presente": 6,
+      "todos_presentes": 6
+    },
+    "1 farofa": {
+      "n": 6,
+      "ultimo_presente": 4,
+      "todos_presentes": 4
+    }
+  },
+  "por_molde": {
+    "fim de frase + pagamento": {
+      "n": 9,
+      "ultimo_presente": 6,
+      "todos_presentes": 6
+    },
+    "fim de frase curto": {
+      "n": 9,
+      "ultimo_presente": 8,
+      "todos_presentes": 8
+    },
+    "agradecimento": {
+      "n": 9,
+      "ultimo_presente": 3,
+      "todos_presentes": 3
+    },
+    "nada depois": {
+      "n": 9,
+      "ultimo_presente": 9,
+      "todos_presentes": 9
+    },
+    "sem pontuação": {
+      "n": 9,
+      "ultimo_presente": 9,
+      "todos_presentes": 9
+    },
+    "endereço depois": {
+      "n": 9,
+      "ultimo_presente": 9,
+      "todos_presentes": 9
+    }
+  },
+  "total": {
+    "n": 54,
+    "ultimo_presente": 44,
+    "todos_presentes": 44
+  },
+  "erros_do_ultimo_item": [
+    {
+      "molde": "fim de frase + pagamento",
+      "final": "1 Coca de 2 litros",
+      "mensagem": "Boa noite! Quero 3 espetinhos de frango, 2 porções de mandioca e 1 Coca de 2 litros. Pagamento no cartão de débito, por favor.",
+      "saida": "{\"itens\":[{\"produto\":\"espetinho de frango\",\"qtd\":3,\"obs\":null},{\"produto\":\"porção de mandioca frita\",\"qtd\":2,\"obs\":null}],\"endereco\":null,\"pagamento\":\"cartão de débito\"}"
+    },
+    {
+      "molde": "fim de frase + pagamento",
+      "final": "1 Coca-Cola lata",
+      "mensagem": "Boa noite! Quero 3 espetinhos de frango, 2 porções de mandioca e 1 Coca-Cola lata. Pagamento no cartão de débito, por favor.",
+      "saida": "{\"itens\":[{\"produto\":\"espetinho de frango\",\"qtd\":3,\"obs\":null},{\"produto\":\"porção de mandioca frita\",\"qtd\":2,\"obs\":null}],\"endereco\":null,\"pagamento\":\"cartão de débito\"}"
+    },
+    {
+      "molde": "fim de frase + pagamento",
+      "final": "1 Guaraná lata",
+      "mensagem": "Boa noite! Quero 3 espetinhos de frango, 2 porções de mandioca e 1 Guaraná lata. Pagamento no cartão de débito, por favor.",
+      "saida": "{\"itens\":[{\"produto\":\"espetinho de frango\",\"qtd\":3,\"obs\":null},{\"produto\":\"porção de mandioca frita\",\"qtd\":2,\"obs\":null}],\"endereco\":null,\"pagamento\":\"cartão de débito\"}"
+    },
+    {
+      "molde": "fim de frase curto",
+      "final": "1 farofa",
+      "mensagem": "Olá, gostaria de 2 espetinhos de carne, 1 pão de alho e 1 farofa. Vou pagar no Pix.",
+      "saida": "{\"itens\":[{\"produto\":\"espetinho de carne\",\"qtd\":2,\"obs\":null},{\"produto\":\"pão de alho\",\"qtd\":1,\"obs\":null}],\"endereco\":null,\"pagamento\":\"pix\"}"
+    },
+    {
+      "molde": "agradecimento",
+      "final": "1 Coca de 2 litros",
+      "mensagem": "Boa tarde. Me manda 4 espetinhos de linguiça, 2 espetinhos de coração e 1 Coca de 2 litros. Obrigado!",
+      "saida": "{\"itens\":[{\"produto\":\"espetinho de linguiça\",\"qtd\":4,\"obs\":null},{\"produto\":\"espetinho de coração\",\"qtd\":2,\"obs\":null}],\"endereco\":null,\"pagamento\":null}"
+    },
+    {
+      "molde": "agradecimento",
+      "final": "1 Coca-Cola lata",
+      "mensagem": "Boa tarde. Me manda 4 espetinhos de linguiça, 2 espetinhos de coração e 1 Coca-Cola lata. Obrigado!",
+      "saida": "{\"itens\":[{\"produto\":\"espetinho de linguiça\",\"qtd\":4,\"obs\":null},{\"produto\":\"espetinho de coração\",\"qtd\":2,\"obs\":null}],\"endereco\":null,\"pagamento\":null}"
+    },
+    {
+      "molde": "agradecimento",
+      "final": "1 Guaraná lata",
+      "mensagem": "Boa tarde. Me manda 4 espetinhos de linguiça, 2 espetinhos de coração e 1 Guaraná lata. Obrigado!",
+      "saida": "{\"itens\":[{\"produto\":\"espetinho de linguiça\",\"qtd\":4,\"obs\":null},{\"produto\":\"espetinho de coração\",\"qtd\":2,\"obs\":null}],\"endereco\":null,\"pagamento\":null}"
+    },
+    {
+      "molde": "agradecimento",
+      "final": "1 suco de laranja",
+      "mensagem": "Boa tarde. Me manda 4 espetinhos de linguiça, 2 espetinhos de coração e 1 suco de laranja. Obrigado!",
+      "saida": "{\"itens\":[{\"produto\":\"espetinho de linguiça\",\"qtd\":4,\"obs\":null},{\"produto\":\"espetinho de coração\",\"qtd\":2,\"obs\":null}],\"endereco\":null,\"pagamento\":null}"
+    },
+    {
+      "molde": "agradecimento",
+      "final": "1 água sem gás",
+      "mensagem": "Boa tarde. Me manda 4 espetinhos de linguiça, 2 espetinhos de coração e 1 água sem gás. Obrigado!",
+      "saida": "{\"itens\":[{\"produto\":\"espetinho de linguiça\",\"qtd\":4,\"obs\":null},{\"produto\":\"espetinho de coração\",\"qtd\":2,\"obs\":null}],\"endereco\":null,\"pagamento\":null}"
+    },
+    {
+      "molde": "agradecimento",
+      "final": "1 farofa",
+      "mensagem": "Boa tarde. Me manda 4 espetinhos de linguiça, 2 espetinhos de coração e 1 farofa. Obrigado!",
+      "saida": "{\"itens\":[{\"produto\":\"espetinho de linguiça\",\"qtd\":4,\"obs\":null},{\"produto\":\"espetinho de coração\",\"qtd\":2,\"obs\":null}],\"endereco\":null,\"pagamento\":null}"
+    }
+  ]
+}

@@ -9,8 +9,13 @@
 ## Prova final limpa do v5: feita (31/10)
 18 mensagens novas escritas por você; gabarito commitado antes de rodar (8c32da7). Resultado: **v5 17/18, Claude com regras 16/18, Claude sem regras 15/18, v3 16/18**: empate técnico. O erro do v5 (e dois do v3) é o mesmo item: **Coca 2L perdida no fim do pedido**. Diário, seção 17; imagem `10_prova_final_v5.png`.
 
-## Decisão aberta: investigar a "Coca 2L"?
-Hipótese ainda não testada: o defeito que sobrou pode ser específico de "Coca 2L" (ambígua com "coca" = lata), e não só da pontuação. Para testar sem mexer na prova final: um diagnóstico que troca só o último item das mesmas mensagens (Coca 2L por suco, água etc.) e vê se o modelo ainda perde. Se confirmar, uma correção nos dados seria um **v6** e precisaria de uma **prova nova com mensagens que você ainda não escreveu** (a atual já foi vista).
+## A "Coca 2L" não era o problema (diário, seção 18)
+Teste controlado (`src/diagnosticar_item_final.py`, 6 frases-molde × 9 últimos itens): o v5 manteve o último item em **44/54** e o v3 em **24/54**; a Coca 2L foi mantida 12/12 no v5. O que concentra os erros do v5 é a frase que vem **depois** da lista, principalmente "Obrigado!" (3/9) e "Pagamento no cartão de débito, por favor." (6/9).
+
+## Decisão aberta: fazer um v6?
+- Passo barato antes: mesmos moldes, variando só o fechamento ("obrigado" minúsculo, sem "!", etc.) para saber o que pesa.
+- Se valer a pena, o v6 mexe no gerador (fechamentos com maiúscula e "!" colados na lista) e precisa de uma **prova nova com mensagens que você ainda não escreveu** (a atual já foi vista).
+- Alternativa: aceitar o v5 como está (empate técnico com o Claude na prova final), documentar o defeito e seguir para a API.
 
 ## Reproduzir os experimentos
 ```powershell
