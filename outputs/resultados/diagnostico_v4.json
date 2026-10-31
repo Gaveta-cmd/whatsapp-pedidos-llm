@@ -1,0 +1,36 @@
+{
+  "original": {
+    "acertos": 21,
+    "erros_por_tipo": {
+      "item_faltando": 18,
+      "observacao": 1,
+      "item_a_mais": 1
+    }
+  },
+  "minusculas": {
+    "acertos": 22,
+    "erros_por_tipo": {
+      "item_faltando": 17,
+      "observacao": 1,
+      "item_a_mais": 1
+    }
+  },
+  "sem pontuacao": {
+    "acertos": 27,
+    "erros_por_tipo": {
+      "item_faltando": 11,
+      "endereco": 1,
+      "observacao": 1,
+      "item_a_mais": 1
+    }
+  },
+  "minusculas e sem pontuacao": {
+    "acertos": 26,
+    "erros_por_tipo": {
+      "item_faltando": 12,
+      "endereco": 1,
+      "observacao": 1,
+      "item_a_mais": 1
+    }
+  }
+}

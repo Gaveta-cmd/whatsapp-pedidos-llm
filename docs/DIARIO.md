@@ -181,6 +181,16 @@ Critério fixado antes do resultado: >= 34/40 em todas as formas e diferença <=
 O que NÃO sabemos: por que piorou. Hipóteses ainda não testadas: (a) a mudança do gerador (pontuação, caixa de frase, mais ruído) deixou o treino mais difícil e 3 épocas em 3.000 exemplos não bastam; (b) as 40 mensagens reais já estão contaminadas pelo estilo que o v3 aprendeu a imitar (elas guiaram o v3); (c) variação normal entre treinos (um treino só, sem repetição). Nenhuma foi confirmada; não vamos afirmar causa sem experimento.
 Decisão: o v3 continua sendo o melhor modelo medido. Não há prova final do v4, pois não passou no critério.
 
+### 14. Diagnóstico do v4 (parcial)
+Script `src/diagnosticar.py`: classifica cada divergência do modelo em relação ao Claude (nas 40 mensagens, 4 formas de escrita). Resultados em `outputs/resultados/diagnostico_v3.json` e `diagnostico_v4.json`.
+- **Quase todo erro é "item faltando"**: v4 com 18 de 19 erros (mensagens como escritas), v3 com 13 de 16. Quantidade, endereço e pagamento quase não erram.
+- **O item que some é o último da lista**: somando as 4 formas de escrita, no v4 46 dos 58 itens perdidos eram o último (no v3, 28 de 36). Os pedidos têm 3 ou 4 itens.
+- **Itens mais perdidos no v4**: suco de laranja (19), queijo coalho (12), guaraná lata (8), farofa (6). Em todas as mensagens com erro há uma frase depois do pedido (pagamento ou pergunta).
+- O erro não é de pontuação: sem pontuação o v4 continuou ruim (27/40), enquanto o v3 melhorou (34/40). A hipótese do v4 ("o problema é pontuação") estava, no mínimo, incompleta.
+
+Hipótese ainda NÃO confirmada: o modelo encerra a lista cedo quando uma frase de pagamento/pergunta vem logo depois dela. Teste planejado (contrafactual): tirar a frase de pagamento das 40 mensagens e ver se o último item volta. O teste foi iniciado e interrompido antes de terminar; nenhum resultado dele existe ainda.
+Outra explicação possível a checar: itens escritos de forma curta ("um suco", "queijo", "guarana") que o modelo precisa mapear para o nome completo do cardápio.
+
 ## Decisões técnicas
 - **LoRA em bf16**, não QLoRA: o Qwen 1.5B ocupa ~3 GB e a GPU tem 16 GB; comprimir em 4 bits só vale se o modelo não couber.
 - **Prompt curto no treino** ("Extraia o pedido da mensagem em JSON."): o cardápio é aprendido nos pesos, o que reduz tokens por chamada.
