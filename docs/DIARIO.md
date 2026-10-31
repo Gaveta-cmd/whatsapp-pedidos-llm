@@ -166,6 +166,21 @@ Mudanças nos dados: pontuação variada (ponto, reticências, exclamação, que
 Ocorrências: o primeiro treino ficou lento (a placa estava dividida com outros programas, memória em 15,9 de 16 GB), foi suspenso, e o processo congelado acabou encerrado pelo app, perdendo o progresso (o script ainda não tinha checkpoint). O script agora salva a cada 50 passos e aceita `--retomar`. O segundo treino foi interrompido por escolha na época ~1 de 3, com checkpoint salvo. Ver `docs/PROXIMOS_PASSOS.md`.
 Lição de engenharia: treinos longos precisam de checkpoint desde o primeiro disparo.
 
+### 13. Resultado do v4: reprovado no critério
+O treino foi retomado do checkpoint e terminou em ~8 min com a placa livre (a lentidão anterior era disputa pela GPU). Perda final de treino: 0,0019.
+
+| Concordância com o Claude em 40 mensagens reais | v3 | v4 |
+|---|---|---|
+| como foram escritas | 24/40 | 21/40 |
+| minúsculas | - | 22/40 |
+| sem pontuação | 34/40 | 27/40 |
+| minúsculas e sem pontuação | - | 26/40 |
+
+Critério fixado antes do resultado: >= 34/40 em todas as formas e diferença <= 3. **Reprovado**: o v4 ficou abaixo do v3 em todas as comparações possíveis, e o teste sintético também caiu (92% contra 97% do v3). JSON válido continua em 100%, então o problema é de conteúdo, não de formato.
+
+O que NÃO sabemos: por que piorou. Hipóteses ainda não testadas: (a) a mudança do gerador (pontuação, caixa de frase, mais ruído) deixou o treino mais difícil e 3 épocas em 3.000 exemplos não bastam; (b) as 40 mensagens reais já estão contaminadas pelo estilo que o v3 aprendeu a imitar (elas guiaram o v3); (c) variação normal entre treinos (um treino só, sem repetição). Nenhuma foi confirmada; não vamos afirmar causa sem experimento.
+Decisão: o v3 continua sendo o melhor modelo medido. Não há prova final do v4, pois não passou no critério.
+
 ## Decisões técnicas
 - **LoRA em bf16**, não QLoRA: o Qwen 1.5B ocupa ~3 GB e a GPU tem 16 GB; comprimir em 4 bits só vale se o modelo não couber.
 - **Prompt curto no treino** ("Extraia o pedido da mensagem em JSON."): o cardápio é aprendido nos pesos, o que reduz tokens por chamada.

@@ -6,7 +6,9 @@
 # Antes: feche jogos e programas pesados (Wallpaper Engine, etc.). O treino usa quase toda a memória da placa.
 # Duração aproximada com a placa livre: treino 10-20 min + avaliações 10 min.
 
-$ErrorActionPreference = "Stop"
+# "Continue" (e nao "Stop"): o PowerShell 5.1 trata qualquer aviso do Python no stderr como erro fatal quando usamos 2>&1.
+# Os erros reais sao pegos pelas checagens explicitas abaixo.
+$ErrorActionPreference = "Continue"
 Set-Location $PSScriptRoot
 $py = ".\.venv\Scripts\python.exe"
 $env:PYTHONIOENCODING = "utf-8"

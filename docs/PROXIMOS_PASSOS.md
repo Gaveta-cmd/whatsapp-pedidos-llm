@@ -5,6 +5,9 @@
 - **v4** (corrige pontuação/maiúsculas): dados prontos (3.000 exemplos), treino **interrompido** na época ~1 de 3. Há um checkpoint em `outputs/checkpoints/checkpoint-200`; ele **não vai para o GitHub** (fica só no computador).
 - Critério de aceitação do v4, definido antes do resultado, em `src/robustez.py`: concordância com o Claude >= 34/40 nas 4 formas da mensagem e diferença <= 3 entre a melhor e a pior.
 
+## Atualização: v4 já rodou e foi REPROVADO
+Concordância com o Claude: 21, 22, 27 e 26 de 40 nas 4 formas (critério: >= 34 em todas). Pior que o v3; teste sintético 92% (v3: 97%). Detalhes e hipóteses não testadas na seção 13 do diário. Não há prova final do v4. Decidir o próximo experimento (ver diário) antes de gastar mais treino. O texto abaixo é o histórico de como o v4 foi rodado.
+
 ## Para rodar o v4 (no computador do projeto)
 1. Feche jogos e programas que usam a placa (Wallpaper Engine, etc.).
 2. No PowerShell, dentro da pasta do projeto:

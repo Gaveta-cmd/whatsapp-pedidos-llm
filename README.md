@@ -29,7 +29,7 @@ Uma lista de itens vazia significa que a mensagem **não é um pedido** (pergunt
 ## Lições até agora
 - Dados sintéticos davam 99% no teste do mesmo gerador, mas **30% em mensagens novas** (v2): o modelo aprendeu o estilo do gerador, não o problema. Ver o diário.
 - O **v3** (cardápio de 17 itens, mensagens sem pedido e itens fora do cardápio no treino) fez **15/20 (75%)** numa prova com 20 mensagens novas, empatado com o Claude Haiku com regras (15/20). Com 20 mensagens é um empate técnico.
-- O v3 tem um defeito conhecido: **perde bebidas no fim do pedido quando a mensagem tem pontuação** (24/40 de concordância com o Claude nas mensagens como foram escritas, 34/40 com a pontuação removida). O v4 vai corrigir isso.
+- O v3 tem um defeito conhecido: **perde bebidas no fim do pedido quando a mensagem tem pontuação** (24/40 de concordância com o Claude nas mensagens como foram escritas, 34/40 com a pontuação removida). Uma tentativa de corrigir isso (v4: dados com pontuação variada) **foi reprovada** no critério definido antes do resultado e ficou pior que o v3 (ver diário, seção 13).
 - O gabarito da prova final foi escrito **antes** de rodar os modelos.
 - Cardápio fixo: o modelo "sabe" o cardápio porque aprendeu no treino; se o cardápio mudar, precisa retreinar.
 
