@@ -1,0 +1,49 @@
+{
+  "name": "Extrator de pedidos de WhatsApp (exemplo)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pedido",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Mensagem recebida",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "extrator-pedidos-exemplo"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/extrair-pedido",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"mensagem\": $json.body.mensagem } }}",
+        "options": {}
+      },
+      "name": "Extrair pedido (API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "name": "Devolver pedido",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [480, 0]
+    }
+  ],
+  "connections": {
+    "Mensagem recebida": { "main": [[{ "node": "Extrair pedido (API)", "type": "main", "index": 0 }]] },
+    "Extrair pedido (API)": { "main": [[{ "node": "Devolver pedido", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": {}
+}

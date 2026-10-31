@@ -26,6 +26,18 @@ Uma lista de itens vazia significa que a mensagem **não é um pedido** (pergunt
 
 > **Sobre o uso de IA:** este projeto foi desenvolvido com apoio de um assistente de IA (Claude Code). Os dados, as regras de negócio, o gabarito das provas e a análise dos resultados foram definidos e revisados por mim.
 
+## Como funciona
+```mermaid
+flowchart LR
+    A["Mensagem do cliente<br/>(WhatsApp)"] --> B["n8n (opcional)<br/>docs/n8n_fluxo_exemplo.json"]
+    B --> C["API FastAPI<br/>POST /extrair-pedido"]
+    A --> C
+    C --> D["Qwen2.5-1.5B + LoRA<br/>(roda local, GPU)"]
+    D --> E["JSON validado<br/>com Pydantic"]
+    E --> F["Pedido: itens, endereço, pagamento<br/>(itens vazios = não é pedido)"]
+```
+O fluxo do n8n (`docs/n8n_fluxo_exemplo.json`, importável) recebe a mensagem num webhook, chama a API e devolve o JSON. **Não foi testado no n8n**: só a API foi testada de ponta a ponta.
+
 ## O que tem aqui
 | Pasta/arquivo | Para quê |
 |---|---|
