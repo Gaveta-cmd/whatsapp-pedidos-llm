@@ -231,7 +231,31 @@ Leitura: a caixa (maiúsculas) pouco explica; **a pontuação nova do v4 piorou 
 Leitura: o que atrapalha é sobretudo o **fim de frase** (ponto, interrogação) depois da lista de itens; as vírgulas pesam pouco. Todos os modelos, inclusive o v3, sofrem com isso; o v4 sofre mais.
 Hipótese ainda não testada sobre o porquê: nos dados de treino, "produto seguido de ? ou ." aparece em mensagens que NÃO são pedido ("quanto custa o espetinho de carne?", "vcs tem cerveja?"), então o modelo pode ter aprendido que produto colado a um fim de frase deve ser ignorado.
 
-**Experimento E (em andamento):** "gêmeos de pontuação": cada mensagem de treino ganha uma cópia com a pontuação mexida (sem fim de frase, sem vírgulas, sem nenhuma, fim de frase vira vírgula) e o MESMO gabarito, para o modelo aprender que a pontuação não muda o pedido. Gerador com `--gemeos`, 4.000 exemplos (2.000 pares). O endereço é preservado intacto nos gêmeos.
+**Experimento E: "gêmeos de pontuação".** Cada mensagem de treino ganha uma cópia com a pontuação mexida (sem fim de frase, sem vírgulas, sem nenhuma, fim de frase vira vírgula) e o MESMO gabarito, para o modelo aprender que a pontuação não muda o pedido. Gerador com `--gemeos`, 4.000 exemplos (2.000 pares), pontuação-base do v3 e caixa do v4. O endereço é preservado intacto nos gêmeos. Resultado no item 16.
+
+### 16. v5: aprovado no critério
+O experimento E virou o **v5** (`data/train.jsonl` agora são esses 4.000 exemplos; adapter em `outputs/lora-qwen1.5b`, só no computador).
+
+| Concordância com o Claude, 40 mensagens | v3 | v4 (reprovado) | v5 |
+|---|---|---|---|
+| como foram escritas | 24 | 16 | **35** |
+| minúsculas | 27 | 18 | **35** |
+| sem pontuação | 34 | 29 | **36** |
+| minúsculas e sem pontuação | 36 | 29 | **37** |
+| critério (>= 34 em todas, diferença <= 3) | reprovado | reprovado | **aprovado** (diferença 2) |
+
+Teste sintético: v5 98%, v3 97%. JSON válido 100%. Imagem: `09_robustez_pontuacao.png`.
+
+Checagem em dois lotes anteriores de 20 mensagens (só o adapter, sem Claude): **v5 18/20 e 17/20; v3 17/20 e 15/20**. O 15/20 do v3 bate com o que já estava registrado, então o pipeline reproduz. Ressalvas honestas:
+- Essas 40 + 20 + 20 mensagens **não são um teste limpo**: foram lidas por mim e guiaram a hipótese da pontuação (o modelo nunca treinou com o conteúdo delas, mas a escolha do experimento foi influenciada por elas).
+- 20 mensagens é pouco (cada uma vale 5 pontos); 18 contra 17 é empate técnico. O ganho mais claro é nas 40 mensagens com 4 formas de escrita (de 24 para 35 na forma original).
+- Uma execução de treino por variante: parte da diferença pode ser acaso.
+- Mudei duas coisas ao mesmo tempo em relação ao v4 retomado (gêmeos e pontuação-base do v3), mas as ablações B e C indicam que a pontuação é o fator, e os gêmeos o que levou a aprovação.
+- A explicação do mecanismo (produto colado a fim de frase em mensagens sem pedido) segue como hipótese, não provada.
+
+**Prova final limpa (pendente, é sua):** escrever 15 a 20 mensagens novas, bem pontuadas e com maiúsculas, em `data/mensagens_finais_v5.txt`, sem eu ver antes; eu escrevo o gabarito antes de rodar. Comando: `python src/avaliar_final.py --mensagens data/mensagens_finais_v5.txt --gold data/final_gold_v5.jsonl --nome final_v5 --rotulo lora_v5 --adapter outputs/lora-qwen1.5b-v5`. Nada de dados ou treino muda depois de ver o resultado.
+
+Como reproduzir o v5: `python src/gerar_dados.py --n 4000 --seed 42 --manter-teste --caixa v4 --pontuacao v3 --gemeos` e `python src/treinar.py --epocas 3` (leva ~25 min na RTX 5060 Ti).
 
 ## Decisões técnicas
 - **LoRA em bf16**, não QLoRA: o Qwen 1.5B ocupa ~3 GB e a GPU tem 16 GB; comprimir em 4 bits só vale se o modelo não couber.

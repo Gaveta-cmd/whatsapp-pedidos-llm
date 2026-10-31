@@ -1,0 +1,28 @@
+{
+  "resumo": {
+    "E_gemeos": {
+      "acerto_exato": "18/20",
+      "com_pedido": "15/17",
+      "sem_pedido": "3/3",
+      "json_valido": "20/20"
+    }
+  },
+  "erros": [
+    {
+      "modelo": "E_gemeos",
+      "n": 9,
+      "mensagem": "Mestre capricha no alho do pao viu, me ve 2 pao de alho, 2 boi, 1 mandioca e traz molho de maionese caseira tb",
+      "nota": "maionese fora do cardapio",
+      "esperado": "2x pão de alho [caprichar]; 2x espetinho de carne; 1x porção de mandioca frita | end=None | pag=None",
+      "obtido": "2x pão de alho; 2x espetinho de carne; 1x porção de mandioca frita | end=None | pag=None"
+    },
+    {
+      "modelo": "E_gemeos",
+      "n": 17,
+      "mensagem": "capricha na farofa mano, me ve 2 de boi, 2 de frango, 1 picanha, e 1 porçao de arroz. Pix",
+      "nota": "picanha e arroz no cardapio",
+      "esperado": "1x porção de farofa [caprichar]; 2x espetinho de carne; 2x espetinho de frango; 1x espetinho de picanha; 1x porção de arroz | end=None | pag=pix",
+      "obtido": "2x espetinho de carne; 2x espetinho de frango; 1x espetinho de picanha; 1x porção de arroz | end=None | pag=pix"
+    }
+  ]
+}

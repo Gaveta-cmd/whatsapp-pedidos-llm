@@ -1,0 +1,14 @@
+{
+  "n": 100,
+  "json_valido": 1.0,
+  "acerto_exato": 0.98,
+  "f1_produto_qtd": 0.9942857142857143,
+  "f1_produto_qtd_obs": 0.9942857142857143,
+  "acc_endereco": 1.0,
+  "acc_pagamento": 1.0,
+  "modelo": "Qwen/Qwen2.5-1.5B-Instruct",
+  "adapter": "lora-qwen1.5b-v5",
+  "latencia_media_s": 3.3658614060000036,
+  "latencia_p95_s": 6.090927899997041,
+  "gpu": "NVIDIA GeForce RTX 5060 Ti"
+}

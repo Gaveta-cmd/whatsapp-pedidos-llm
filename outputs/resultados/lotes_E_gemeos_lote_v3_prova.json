@@ -1,0 +1,36 @@
+{
+  "resumo": {
+    "E_gemeos": {
+      "acerto_exato": "17/20",
+      "com_pedido": "14/17",
+      "sem_pedido": "3/3",
+      "json_valido": "20/20"
+    }
+  },
+  "erros": [
+    {
+      "modelo": "E_gemeos",
+      "n": 3,
+      "mensagem": "fala truta me ve ai 3 frang 2 coraçao 1 mandioca frita caprichada no sal e 1 guarana no dinheiro troco p 20",
+      "nota": "'caprichada no sal': obs caprichar ou literal",
+      "esperado": "3x espetinho de frango; 2x espetinho de coração; 1x porção de mandioca frita [caprichar]; 1x guaraná lata | end=None | pag=dinheiro",
+      "obtido": "3x espetinho de frango; 2x espetinho de coração; 1x porção de mandioca frita [caprichar no sal]; 1x guaraná lata | end=None | pag=dinheiro"
+    },
+    {
+      "modelo": "E_gemeos",
+      "n": 9,
+      "mensagem": "capricha no ponto da carne mano bem mal passada... 3 de carne 2 de coracao 1 mandioca 1 coca lata pro pix",
+      "nota": "'bem mal passada' = mal passado; alt sem obs",
+      "esperado": "3x espetinho de carne [mal passado]; 2x espetinho de coração; 1x porção de mandioca frita; 1x coca-cola lata | end=None | pag=pix",
+      "obtido": "3x espetinho de carne [caprichar no ponto]; 2x espetinho de coração; 1x porção de mandioca frita; 1x coca-cola lata | end=None | pag=pix"
+    },
+    {
+      "modelo": "E_gemeos",
+      "n": 11,
+      "mensagem": "opa me ve 2 coalho 2 boi 1 pao de alho 1 h2oh limao pera vcs n tem h2oh ne entao manda 1 coca 2l msm dinheiro",
+      "nota": "h2oh fora do cardapio; 'msm dinheiro'",
+      "esperado": "2x espetinho de queijo coalho; 2x espetinho de carne; 1x pão de alho; 1x coca-cola 2l | end=None | pag=dinheiro",
+      "obtido": "2x espetinho de queijo coalho; 2x espetinho de carne; 1x pão de alho; 1x suco de laranja | end=None | pag=dinheiro"
+    }
+  ]
+}

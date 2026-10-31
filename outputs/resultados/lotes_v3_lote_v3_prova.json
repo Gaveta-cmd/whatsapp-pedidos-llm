@@ -1,0 +1,52 @@
+{
+  "resumo": {
+    "v3": {
+      "acerto_exato": "15/20",
+      "com_pedido": "13/17",
+      "sem_pedido": "2/3",
+      "json_valido": "20/20"
+    }
+  },
+  "erros": [
+    {
+      "modelo": "v3",
+      "n": 8,
+      "mensagem": "eai parceiro meu pedido da rua 12 ja saiu pra entrega? faz 40 min ja",
+      "nota": "sem pedido (reclamacao de pedido atrasado)",
+      "esperado": " | end=None | pag=None",
+      "obtido": " | end=rua 12 | pag=None"
+    },
+    {
+      "modelo": "v3",
+      "n": 9,
+      "mensagem": "capricha no ponto da carne mano bem mal passada... 3 de carne 2 de coracao 1 mandioca 1 coca lata pro pix",
+      "nota": "'bem mal passada' = mal passado; alt sem obs",
+      "esperado": "3x espetinho de carne [mal passado]; 2x espetinho de coração; 1x porção de mandioca frita; 1x coca-cola lata | end=None | pag=pix",
+      "obtido": "3x espetinho de carne [caprichar]; 2x espetinho de coração; 1x porção de mandioca frita; 1x coca-cola lata | end=None | pag=pix"
+    },
+    {
+      "modelo": "v3",
+      "n": 17,
+      "mensagem": "capricha no assado chefe, me ve 3 espeto d linguiça e 1 de cada acompanhamento q vcs tem ai. pagamento no credito",
+      "nota": "'capricha no assado' generico: obs null",
+      "esperado": "3x espetinho de linguiça; 1x porção de farofa; 1x porção de vinagrete; 1x pão de alho; 1x porção de mandioca frita; 1x porção de arroz; 1x porção de feijão | end=None | pag=cartão de crédito",
+      "obtido": "3x espetinho de linguiça; 1x porção de farofa; 1x porção de vinagrete; 1x pão de alho; 1x porção de mandioca frita | end=None | pag=cartão de crédito"
+    },
+    {
+      "modelo": "v3",
+      "n": 18,
+      "mensagem": "bo anoi te me ve 2 espeto frang 2 espeto corac 1 mandioca e 1 agua sem gas pix",
+      "nota": "muitos erros de digitacao",
+      "esperado": "2x espetinho de frango; 2x espetinho de coração; 1x porção de mandioca frita; 1x água sem gás | end=None | pag=pix",
+      "obtido": "2x espetinho de frango; 2x espetinho de coração; 1x porção de mandioca frita | end=None | pag=pix"
+    },
+    {
+      "modelo": "v3",
+      "n": 19,
+      "mensagem": "vcs tem coca zero lata? se tiver manda 2 zero 3 espeto d boi e 2 pao de alho. troco p 100",
+      "nota": "coca zero fora do cardapio; troco = dinheiro",
+      "esperado": "3x espetinho de carne; 2x pão de alho | end=None | pag=dinheiro",
+      "obtido": "3x espetinho de carne; 2x pão de alho | end=None | pag=pix"
+    }
+  ]
+}

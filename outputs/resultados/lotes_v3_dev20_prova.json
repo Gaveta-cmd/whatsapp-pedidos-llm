@@ -1,0 +1,36 @@
+{
+  "resumo": {
+    "v3": {
+      "acerto_exato": "17/20",
+      "com_pedido": "14/17",
+      "sem_pedido": "3/3",
+      "json_valido": "19/20"
+    }
+  },
+  "erros": [
+    {
+      "modelo": "v3",
+      "n": 9,
+      "mensagem": "Mestre capricha no alho do pao viu, me ve 2 pao de alho, 2 boi, 1 mandioca e traz molho de maionese caseira tb",
+      "nota": "maionese fora do cardapio",
+      "esperado": "2x pão de alho [caprichar]; 2x espetinho de carne; 1x porção de mandioca frita | end=None | pag=None",
+      "obtido": "2x pão de alho; 2x espetinho de carne; 1x porção de mandioca frita | end=None | pag=None"
+    },
+    {
+      "modelo": "v3",
+      "n": 12,
+      "mensagem": "manda 2 de frango e 1 coca 2lpera adiciona mais 2 queijo coalho e 1 mandioca frita troco p 100 reais blz",
+      "nota": "duas mensagens coladas; troco = dinheiro",
+      "esperado": "2x espetinho de frango; 1x coca-cola 2l; 2x espetinho de queijo coalho; 1x porção de mandioca frita | end=None | pag=dinheiro",
+      "obtido": "JSON INVALIDO"
+    },
+    {
+      "modelo": "v3",
+      "n": 17,
+      "mensagem": "capricha na farofa mano, me ve 2 de boi, 2 de frango, 1 picanha, e 1 porçao de arroz. Pix",
+      "nota": "picanha e arroz no cardapio",
+      "esperado": "1x porção de farofa [caprichar]; 2x espetinho de carne; 2x espetinho de frango; 1x espetinho de picanha; 1x porção de arroz | end=None | pag=pix",
+      "obtido": "2x espetinho de carne; 2x espetinho de frango; 1x espetinho de picanha; 1x porção de arroz | end=None | pag=pix"
+    }
+  ]
+}

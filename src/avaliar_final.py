@@ -62,10 +62,10 @@ def rodar_claude(msgs: list[str], com_regras: bool) -> list[str]:
     return saidas
 
 
-def rodar_lora(msgs: list[str]) -> list[str]:
+def rodar_lora(msgs: list[str], adapter: str) -> list[str]:
     tok = AutoTokenizer.from_pretrained(MODELO)
     base = AutoModelForCausalLM.from_pretrained(MODELO, dtype=torch.bfloat16).to("cuda")
-    model = PeftModel.from_pretrained(base, str(RAIZ / "outputs" / "lora-qwen1.5b")).merge_and_unload().eval()
+    model = PeftModel.from_pretrained(base, adapter).merge_and_unload().eval()
     saidas = []
     for m in msgs:
         ids = tok.apply_chat_template(mensagens_curtas(m), add_generation_prompt=True, return_tensors="pt",
@@ -82,6 +82,8 @@ def main() -> None:
     ap.add_argument("--gold", default=str(RAIZ / "data" / "final_gold.jsonl"))
     ap.add_argument("--nome", default="final", help="prefixo dos arquivos de saída em outputs/resultados")
     ap.add_argument("--rotulo", default="lora_v3", help="nome do adapter no relatório")
+    ap.add_argument("--adapter", default=str(RAIZ / "outputs" / "lora-qwen1.5b"))
+    ap.add_argument("--sem-claude", action="store_true", help="só o adapter (sem chamar a API: sem custo)")
     a = ap.parse_args()
 
     carregar_env()
@@ -91,11 +93,10 @@ def main() -> None:
     n = len(msgs)
     sem_pedido = [i for i, g in enumerate(gold) if not g["pedido"]["itens"]]
 
-    respostas = {
-        a.rotulo: rodar_lora(msgs),
-        "claude_sem_regras": rodar_claude(msgs, False),
-        "claude_com_regras": rodar_claude(msgs, True),
-    }
+    respostas = {a.rotulo: rodar_lora(msgs, a.adapter)}
+    if not a.sem_claude:
+        respostas["claude_sem_regras"] = rodar_claude(msgs, False)
+        respostas["claude_com_regras"] = rodar_claude(msgs, True)
 
     resumo_final, detalhes = {}, []
     for nome, brutas in respostas.items():

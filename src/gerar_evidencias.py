@@ -27,8 +27,8 @@ FASE_C14 = [  # cardápio de 14 itens (v1, v2)
 FASE_C17 = [  # cardápio de 17 itens (v3 em diante)
     ("baseline_base", "Qwen 1.5B\nsem treino", "#9aa0a6"),
     ("lora_qwen_v3", "Qwen + LoRA\nv3", "#7aa7e8"),
-    ("lora_qwen_v4_retomado", "Qwen + LoRA\nv4 retomado", "#5b8fe0"),
-    ("lora_qwen_v4_zero", "Qwen + LoRA\nv4 do zero", "#2f6fdb"),
+    ("lora_qwen_v4_zero", "Qwen + LoRA\nv4 (reprovado)", "#b9c9e8"),
+    ("lora_qwen_v5", "Qwen + LoRA\nv5", "#2f6fdb"),
     ("baseline_claude", "Claude Haiku\n(API)", "#e08a3c"),
     ("baseline_claude_regras", "Claude Haiku\n+ regras", "#c2611b"),
 ]
@@ -85,8 +85,49 @@ def grafico_final(arquivo: str, chave: str, rotulo: str, saida: str, titulo: str
     plt.close(fig)
 
 
+def grafico_robustez() -> None:
+    """Concordância com o Claude em 40 mensagens, nas 4 formas de escrita, para v3, v4 e v5."""
+    def forma(arq: str, chave=lambda d: d["concordancia_com_claude_de_40"]):
+        p = RES / arq
+        return chave(json.loads(p.read_text(encoding="utf-8"))) if p.exists() else None
+
+    series = [
+        ("v3", forma("diagnostico_v3.json", lambda d: {k: v["acertos"] for k, v in d.items()}), "#9aa0a6"),
+        ("v4 (reprovado)", forma("robustez_v4_zero.json"), "#b9c9e8"),
+        ("v5", forma("robustez_v5.json"), "#2f6fdb"),
+    ]
+    series = [s for s in series if s[1]]
+    if len(series) < 2:
+        return
+    formas = ["original", "minusculas", "sem pontuacao", "minusculas e sem pontuacao"]
+    rotulos = ["como foram\nescritas", "minúsculas", "sem\npontuação", "minúsculas e\nsem pontuação"]
+    fig, ax = plt.subplots(figsize=(11, 4.8))
+    larg = 0.8 / len(series)
+    for k, (nome, vals, cor) in enumerate(series):
+        xs = [i + k * larg for i in range(4)]
+        b = ax.bar(xs, [vals[f] for f in formas], larg, label=nome, color=cor)
+        for r in b:
+            ax.text(r.get_x() + r.get_width() / 2, r.get_height(), f"{int(r.get_height())}", ha="center", va="bottom", fontsize=9)
+    ax.axhline(34, color="#c0392b", linestyle="--", linewidth=1)
+    ax.text(-0.3, 42.3, "linha tracejada = mínimo para aprovar (34)", color="#c0392b", fontsize=8, ha="left")
+    ax.set_xticks([i + larg * (len(series) - 1) / 2 for i in range(4)])
+    ax.set_xticklabels(rotulos)
+    ax.set_ylim(0, 46)
+    ax.set_ylabel("mensagens iguais ao Claude (de 40)")
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.legend(frameon=False, loc="upper right", ncol=3)
+    fig.suptitle("Robustez à pontuação e às maiúsculas: mesmas 40 mensagens, 4 formas de escrita", fontsize=12,
+                 fontweight="bold", x=0.01, ha="left")
+    fig.text(0.01, 0.01, "Critério definido antes do resultado: >= 34 em todas as formas e diferença <= 3  •  "
+             "Fonte: outputs/resultados/*.json", fontsize=8, color="#666")
+    fig.tight_layout(rect=(0, 0.04, 1, 0.93))
+    fig.savefig(SAIDA / "09_robustez_pontuacao.png", dpi=150)
+    plt.close(fig)
+
+
 def main() -> None:
     SAIDA.mkdir(parents=True, exist_ok=True)
+    grafico_robustez()
     grafico_final("final_prova_v2_c14.json", "lora_v2", "Qwen + LoRA v2", "05_prova_final_v2.png",
                   "Prova final (cardápio de 14 itens): 20 mensagens novas, modelo v2")
     grafico_final("final_v3_prova.json", "lora_v3", "Qwen + LoRA v3", "07_prova_final_v3.png",
