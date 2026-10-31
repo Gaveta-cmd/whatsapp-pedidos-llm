@@ -253,9 +253,31 @@ Checagem em dois lotes anteriores de 20 mensagens (só o adapter, sem Claude): *
 - Mudei duas coisas ao mesmo tempo em relação ao v4 retomado (gêmeos e pontuação-base do v3), mas as ablações B e C indicam que a pontuação é o fator, e os gêmeos o que levou a aprovação.
 - A explicação do mecanismo (produto colado a fim de frase em mensagens sem pedido) segue como hipótese, não provada.
 
-**Prova final limpa (pendente, é sua):** escrever 15 a 20 mensagens novas, bem pontuadas e com maiúsculas, em `data/mensagens_finais_v5.txt`, sem eu ver antes; eu escrevo o gabarito antes de rodar. Comando: `python src/avaliar_final.py --mensagens data/mensagens_finais_v5.txt --gold data/final_gold_v5.jsonl --nome final_v5 --rotulo lora_v5 --adapter outputs/lora-qwen1.5b-v5`. Nada de dados ou treino muda depois de ver o resultado.
+A prova final limpa, com mensagens que eu ainda não tinha visto, está no item 17.
 
 Como reproduzir o v5: `python src/gerar_dados.py --n 4000 --seed 42 --manter-teste --caixa v4 --pontuacao v3 --gemeos` e `python src/treinar.py --epocas 3` (leva ~25 min na RTX 5060 Ti).
+
+### 17. Prova final limpa do v5 (31/10)
+O Davi escreveu **18 mensagens novas** (4 sem pedido, 14 com pedido; bem pontuadas, com maiúsculas), sem eu ver antes. Escrevi o gabarito (`data/final_gold_v5.jsonl`) e **commitei junto com as mensagens (8c32da7) antes de rodar qualquer modelo**. Depois rodei v5, Claude Haiku sem e com regras. Endereço comparado literalmente (critério estrito). Imagem: `10_prova_final_v5.png`.
+
+| Acerto exato (18 mensagens) | total | com pedido (14) | sem pedido (4) |
+|---|---|---|---|
+| Qwen + LoRA v5 | **17/18** | 13/14 | 4/4 |
+| Claude Haiku + regras | 16/18 | 12/14 | 4/4 |
+| Claude Haiku sem regras | 15/18 | 11/14 | 4/4 |
+| Qwen + LoRA v3 (rodado depois, mesmo gabarito) | 16/18 | 12/14 | 4/4 |
+
+**Erros, um a um:**
+- **v5 (1):** mensagem 11, "...5 espetinhos de frango, 2 porções de mandioca e 1 Coca 2L. Cartão de débito na entrega, por favor." O modelo perdeu a **Coca 2L**, o último item antes do fim de frase. É exatamente o defeito que o v5 tentava corrigir: ele **não sumiu**, só ficou mais raro.
+- **v3 (2):** a mesma mensagem 11 (perdeu a Coca 2L) e a 6 (perdeu a Coca 2L de novo).
+- **Claude (2 a 3):** quase todos são rigidez do critério literal: endereço "Rua das Orquídeas, 405" sem a palavra "número" (mensagem 6, nos dois), e obs "enviar separado" em vez de "separado" (mensagem 7, nos dois). Um erro real: na mensagem 10 ("Chave Pix é o número de telefone?") o Claude sem regras deixou o pagamento vazio, e as regras de negócio corrigem isso.
+
+**Como ler esse resultado, sem exagero:**
+- A diferença entre v5 (17), v3 (16) e Claude (15 e 16) é de **uma a duas mensagens em 18**. É empate técnico, não vitória. Não dá para dizer que o v5 "é melhor que o Claude".
+- A comparação com o v3 foi feita **depois** de ver o resultado do v5 (o gabarito já estava travado). O gabarito não mudou.
+- O ganho do v5 sobre o v3 que apareceu nas 40 mensagens com 4 formas de escrita (35 contra 24) **não se repetiu em tamanho** nesta prova: aqui o v3 já ia bem (16/18) porque as mensagens do Davi têm pontuação "comportada". Isso é coerente com o defeito do v3 ser mais forte em certos estilos, mas é uma explicação, não uma prova.
+- Os dois erros do v3 e o do v5 são o **mesmo item**: "Coca 2L" no fim do pedido. Observação para investigar (hipótese, não testada): talvez o problema seja específico desse produto ("2L", ou "Coca" sozinha sendo ambígua entre lata e 2L), e não só a pontuação. Não alterei dados nem treino depois de ver o resultado, como combinado.
+- Uma execução de treino por modelo; 18 mensagens escritas por uma pessoa só.
 
 ## Decisões técnicas
 - **LoRA em bf16**, não QLoRA: o Qwen 1.5B ocupa ~3 GB e a GPU tem 16 GB; comprimir em 4 bits só vale se o modelo não couber.

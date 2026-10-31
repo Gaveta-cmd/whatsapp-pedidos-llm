@@ -1,0 +1,28 @@
+{
+  "resumo": {
+    "lora_v3": {
+      "acerto_exato": "16/18",
+      "com_pedido": "12/14",
+      "sem_pedido": "4/4",
+      "json_valido": "18/18"
+    }
+  },
+  "erros": [
+    {
+      "modelo": "lora_v3",
+      "n": 6,
+      "mensagem": "Favor enviar 4 espetinhos de linguiça, 1 porção de farofa e 1 Coca-Cola 2L para a Rua das Orquídeas, número 405. Pagamento no cartão de crédito na entrega.",
+      "nota": "endereco literal; alt sem a virgula",
+      "esperado": "4x espetinho de linguiça; 1x porção de farofa; 1x coca-cola 2l | end=rua das orquídeas, número 405 | pag=cartão de crédito",
+      "obtido": "4x espetinho de linguiça; 1x porção de farofa | end=rua das orquídeas, numero 405 | pag=cartão de crédito"
+    },
+    {
+      "modelo": "lora_v3",
+      "n": 11,
+      "mensagem": "Boa noite, pessoal! Gostaria de encomendar 5 espetinhos de frango, 2 porções de mandioca e 1 Coca 2L. Cartão de débito na entrega, por favor.",
+      "nota": "pedido simples",
+      "esperado": "5x espetinho de frango; 2x porção de mandioca frita; 1x coca-cola 2l | end=None | pag=cartão de débito",
+      "obtido": "5x espetinho de frango; 2x porção de mandioca frita | end=None | pag=cartão de débito"
+    }
+  ]
+}

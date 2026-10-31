@@ -1,0 +1,72 @@
+{
+  "resumo": {
+    "lora_v5": {
+      "acerto_exato": "17/18",
+      "com_pedido": "13/14",
+      "sem_pedido": "4/4",
+      "json_valido": "18/18"
+    },
+    "claude_sem_regras": {
+      "acerto_exato": "15/18",
+      "com_pedido": "11/14",
+      "sem_pedido": "4/4",
+      "json_valido": "18/18"
+    },
+    "claude_com_regras": {
+      "acerto_exato": "16/18",
+      "com_pedido": "12/14",
+      "sem_pedido": "4/4",
+      "json_valido": "18/18"
+    }
+  },
+  "erros": [
+    {
+      "modelo": "lora_v5",
+      "n": 11,
+      "mensagem": "Boa noite, pessoal! Gostaria de encomendar 5 espetinhos de frango, 2 porções de mandioca e 1 Coca 2L. Cartão de débito na entrega, por favor.",
+      "nota": "pedido simples",
+      "esperado": "5x espetinho de frango; 2x porção de mandioca frita; 1x coca-cola 2l | end=None | pag=cartão de débito",
+      "obtido": "5x espetinho de frango; 2x porção de mandioca frita | end=None | pag=cartão de débito"
+    },
+    {
+      "modelo": "claude_sem_regras",
+      "n": 6,
+      "mensagem": "Favor enviar 4 espetinhos de linguiça, 1 porção de farofa e 1 Coca-Cola 2L para a Rua das Orquídeas, número 405. Pagamento no cartão de crédito na entrega.",
+      "nota": "endereco literal; alt sem a virgula",
+      "esperado": "4x espetinho de linguiça; 1x porção de farofa; 1x coca-cola 2l | end=rua das orquídeas, número 405 | pag=cartão de crédito",
+      "obtido": "4x espetinho de linguiça; 1x porção de farofa; 1x coca-cola 2l | end=Rua das Orquídeas, 405 | pag=cartão de crédito"
+    },
+    {
+      "modelo": "claude_sem_regras",
+      "n": 7,
+      "mensagem": "Boa noite. Me vê 2 espetos de boi, 2 de frango e 1 porção de vinagrete (por favor enviar o vinagrete separado). Manda o QR Code do Pix!",
+      "nota": "'espetos de boi' = carne; QR code do pix = pix; obs 'separado' ou nenhuma",
+      "esperado": "2x espetinho de carne; 2x espetinho de frango; 1x porção de vinagrete [separado] | end=None | pag=pix",
+      "obtido": "2x espetinho de carne; 2x espetinho de frango; 1x porção de vinagrete [enviar separado] | end=None | pag=pix"
+    },
+    {
+      "modelo": "claude_sem_regras",
+      "n": 10,
+      "mensagem": "Olá, boa tarde. Por favor, 2 espetos de linguiça, 2 de carne (ao ponto para mal passada) e 1 Coca-Cola lata. Chave Pix é o número de telefone?",
+      "nota": "pergunta sobre a chave pix = pix; obs ambigua (ao ponto para mal passado)",
+      "esperado": "2x espetinho de linguiça; 2x espetinho de carne [ao ponto para mal passado]; 1x coca-cola lata | end=None | pag=pix",
+      "obtido": "2x espetinho de linguiça; 2x espetinho de carne [ao ponto para mal passada]; 1x coca-cola lata | end=None | pag=None"
+    },
+    {
+      "modelo": "claude_com_regras",
+      "n": 6,
+      "mensagem": "Favor enviar 4 espetinhos de linguiça, 1 porção de farofa e 1 Coca-Cola 2L para a Rua das Orquídeas, número 405. Pagamento no cartão de crédito na entrega.",
+      "nota": "endereco literal; alt sem a virgula",
+      "esperado": "4x espetinho de linguiça; 1x porção de farofa; 1x coca-cola 2l | end=rua das orquídeas, número 405 | pag=cartão de crédito",
+      "obtido": "4x espetinho de linguiça; 1x porção de farofa; 1x coca-cola 2l | end=Rua das Orquídeas, 405 | pag=cartão de crédito"
+    },
+    {
+      "modelo": "claude_com_regras",
+      "n": 7,
+      "mensagem": "Boa noite. Me vê 2 espetos de boi, 2 de frango e 1 porção de vinagrete (por favor enviar o vinagrete separado). Manda o QR Code do Pix!",
+      "nota": "'espetos de boi' = carne; QR code do pix = pix; obs 'separado' ou nenhuma",
+      "esperado": "2x espetinho de carne; 2x espetinho de frango; 1x porção de vinagrete [separado] | end=None | pag=pix",
+      "obtido": "2x espetinho de carne; 2x espetinho de frango; 1x porção de vinagrete [enviar separado] | end=None | pag=pix"
+    }
+  ]
+}

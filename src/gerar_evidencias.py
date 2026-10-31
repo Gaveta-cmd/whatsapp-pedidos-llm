@@ -53,14 +53,20 @@ def barras(ax, rotulos, valores, cores, titulo, formato, ymax=None):
         ax.text(r.get_x() + r.get_width() / 2, r.get_height(), formato(v), ha="center", va="bottom", fontsize=10)
 
 
-def grafico_final(arquivo: str, chave: str, rotulo: str, saida: str, titulo: str) -> None:
-    """Prova final (20 mensagens novas): total, com pedido e sem pedido."""
+def grafico_final(arquivo: str, chave: str, rotulo: str, saida: str, titulo: str, extra: tuple | None = None) -> None:
+    """Prova final (mensagens novas): total, com pedido e sem pedido.
+
+    `extra` = (arquivo, chave, rótulo): outro modelo rodado nas MESMAS mensagens e no MESMO gabarito."""
     caminho = RES / arquivo
     if not caminho.exists():
         return
     r = json.loads(caminho.read_text(encoding="utf-8"))["resumo"]
     sistemas = [(chave, rotulo, "#2f6fdb"), ("claude_sem_regras", "Claude\nsem regras", "#e08a3c"),
                 ("claude_com_regras", "Claude\ncom regras", "#c2611b")]
+    if extra and (RES / extra[0]).exists():
+        r[extra[1]] = json.loads((RES / extra[0]).read_text(encoding="utf-8"))["resumo"][extra[1]]
+        sistemas.insert(0, (extra[1], extra[2], "#7aa7e8"))
+    total, com, sem = (int(r[chave][k].split("/")[1]) for k in ("acerto_exato", "com_pedido", "sem_pedido"))
 
     def pct(txt: str) -> float:
         a, b = txt.split("/")
@@ -70,11 +76,11 @@ def grafico_final(arquivo: str, chave: str, rotulo: str, saida: str, titulo: str
     cores = [s[2] for s in sistemas]
     fig, eixos = plt.subplots(1, 3, figsize=(14, 4.6))
     barras(eixos[0], rot, [pct(r[s[0]]["acerto_exato"]) for s in sistemas], cores,
-           "Acerto exato — 20 mensagens", lambda v: f"{v:.0f}%", 115)
+           f"Acerto exato — {total} mensagens", lambda v: f"{v:.0f}%", 115)
     barras(eixos[1], rot, [pct(r[s[0]]["com_pedido"]) for s in sistemas], cores,
-           "Mensagens COM pedido (17)", lambda v: f"{v:.0f}%", 115)
+           f"Mensagens COM pedido ({com})", lambda v: f"{v:.0f}%", 115)
     barras(eixos[2], rot, [pct(r[s[0]]["sem_pedido"]) for s in sistemas], cores,
-           "Mensagens SEM pedido (3)", lambda v: f"{v:.0f}%", 115)
+           f"Mensagens SEM pedido ({sem})", lambda v: f"{v:.0f}%", 115)
     for ax in eixos:
         ax.tick_params(axis="x", labelsize=8)
     fig.suptitle(titulo, fontsize=13, fontweight="bold", x=0.01, ha="left")
@@ -132,6 +138,9 @@ def main() -> None:
                   "Prova final (cardápio de 14 itens): 20 mensagens novas, modelo v2")
     grafico_final("final_v3_prova.json", "lora_v3", "Qwen + LoRA v3", "07_prova_final_v3.png",
                   "Prova final v3 (cardápio de 17 itens): 20 mensagens novas, nunca vistas no treino")
+    grafico_final("final_v5_prova.json", "lora_v5", "Qwen + LoRA\nv5", "10_prova_final_v5.png",
+                  "Prova final v5: 18 mensagens novas escritas por mim, gabarito commitado antes de rodar",
+                  extra=("final_v5_comparacao_v3_prova.json", "lora_v3", "Qwen + LoRA\nv3"))
     for modelos, saida, titulo in [
         (FASE_C14, "01_comparacao_modelos.png", "Fase 1 (cardápio de 14 itens) — 100 mensagens de teste sintéticas"),
         (FASE_C17, "08_comparacao_modelos_v3.png", "Fase 2 (cardápio de 17 itens) — 100 mensagens de teste sintéticas"),

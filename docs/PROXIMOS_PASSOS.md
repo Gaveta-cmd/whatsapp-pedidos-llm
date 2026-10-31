@@ -6,14 +6,11 @@
 - **v5** (v3 + "gêmeos de pontuação" nos dados): **aprovado no critério** definido antes: 35, 35, 36 e 37 de 40 nas 4 formas de escrita (v3: 24, 27, 34, 36). Teste sintético 98%. Diário, seção 16.
 - O adapter do v5 existe só no computador: `outputs/lora-qwen1.5b` e `outputs/lora-qwen1.5b-v5` (iguais). Os dados do v5 estão em `data/train.jsonl` e `data/val.jsonl`.
 
-## Prova final limpa do v5 (a única coisa que depende de você)
-1. Escreva 15 a 20 mensagens **novas**, bem pontuadas e com maiúsculas, como clientes de verdade, em `data/mensagens_finais_v5.txt` (uma por linha; crie o arquivo à mão, sem me mostrar antes).
-2. Me chame: eu escrevo o gabarito (`data/final_gold_v5.jsonl`) **antes** de rodar qualquer modelo.
-3. Rodar (usa a API do Claude para as comparações, custo de centavos):
-```powershell
-.\.venv\Scripts\python.exe src\avaliar_final.py --mensagens data\mensagens_finais_v5.txt --gold data\final_gold_v5.jsonl --nome final_v5 --rotulo lora_v5 --adapter outputs\lora-qwen1.5b-v5
-```
-4. Não alterar dados nem treino depois de ver o resultado.
+## Prova final limpa do v5: feita (31/10)
+18 mensagens novas escritas por você; gabarito commitado antes de rodar (8c32da7). Resultado: **v5 17/18, Claude com regras 16/18, Claude sem regras 15/18, v3 16/18**: empate técnico. O erro do v5 (e dois do v3) é o mesmo item: **Coca 2L perdida no fim do pedido**. Diário, seção 17; imagem `10_prova_final_v5.png`.
+
+## Decisão aberta: investigar a "Coca 2L"?
+Hipótese ainda não testada: o defeito que sobrou pode ser específico de "Coca 2L" (ambígua com "coca" = lata), e não só da pontuação. Para testar sem mexer na prova final: um diagnóstico que troca só o último item das mesmas mensagens (Coca 2L por suco, água etc.) e vê se o modelo ainda perde. Se confirmar, uma correção nos dados seria um **v6** e precisaria de uma **prova nova com mensagens que você ainda não escreveu** (a atual já foi vista).
 
 ## Reproduzir os experimentos
 ```powershell
