@@ -204,6 +204,35 @@ Resultado: **a hipótese quase não se sustenta.** Sem a frase de pagamento o v3
 
 **O que sobra, sem confirmação:** (a) o treino do v4 foi interrompido e retomado do checkpoint-200 (num segundo processo); o retomar pode ter deixado o treino diferente de uma execução contínua; (b) variação normal entre treinos (um treino só de cada versão); (c) algum efeito da pontuação/caixa de frase que as medidas acima não pegam. Experimento que separa (a)/(b) de (c): treinar de novo os dados do v4 **do zero, sem interrupção, mesma semente** (~12 min de treino). Se o resultado ficar parecido com o v3, a causa era o retomar; se continuar ruim, a causa está nos dados novos ou no acaso do treino.
 
+### 15. Retreino, ablações e a pista da pontuação (noite de 30 para 31/10)
+**Retreino do v4 do zero** (sem interrupção; corrigi também uma linha de `treinar.py` em que um comentário tinha engolido `remove_unused_columns=False, seed=42`): teste sintético 98% (melhor que o v3, 97%; o v4 retomado tinha 92%), mas nas 40 mensagens reais **16, 18, 29 e 29 de 40**: continua reprovado. Conclusão: o treino retomado não era a causa do defeito.
+
+**Ablações** (`experimentos.ps1`, mudando uma coisa por vez nos dados do v4; uma execução de cada, então diferenças pequenas podem ser ruído):
+
+| Dados de treino | original | minúsculas | sem pontuação | os dois | sintético |
+|---|---|---|---|---|---|
+| v3 (referência, treino antigo) | 24 | 27 | 34 | 36 | 97% |
+| v4 do zero | 16 | 18 | 29 | 29 | 98% |
+| B: v4 com a caixa do v3 | 19 | 20 | 31 | 30 | 99% |
+| C: v4 com a pontuação/separadores do v3 | 26 | 27 | 33 | 33 | 96% |
+
+Leitura: a caixa (maiúsculas) pouco explica; **a pontuação nova do v4 piorou o modelo** (com a do v3, ele volta ao nível do v3). A variante A (controle com os dados originais do v3) falhou por um erro de arquivo meu (BOM) e foi pulada; C já indica que o pipeline reproduz o v3.
+
+**Qual sinal de pontuação faz o modelo perder itens** (`src/ablacao_pontuacao.py`, só itens comparados com o Claude, em 40 mensagens):
+
+| Forma da mensagem | v3 | C | v4 do zero |
+|---|---|---|---|
+| original | 26 | 26 | 17 |
+| sem vírgulas | 28 | 27 | 20 |
+| sem ponto final/interrogação/exclamação | 35 | 31 | 29 |
+| fim de frase vira vírgula | 30 | 28 | 22 |
+| sem nenhuma pontuação | 34 | 33 | 29 |
+
+Leitura: o que atrapalha é sobretudo o **fim de frase** (ponto, interrogação) depois da lista de itens; as vírgulas pesam pouco. Todos os modelos, inclusive o v3, sofrem com isso; o v4 sofre mais.
+Hipótese ainda não testada sobre o porquê: nos dados de treino, "produto seguido de ? ou ." aparece em mensagens que NÃO são pedido ("quanto custa o espetinho de carne?", "vcs tem cerveja?"), então o modelo pode ter aprendido que produto colado a um fim de frase deve ser ignorado.
+
+**Experimento E (em andamento):** "gêmeos de pontuação": cada mensagem de treino ganha uma cópia com a pontuação mexida (sem fim de frase, sem vírgulas, sem nenhuma, fim de frase vira vírgula) e o MESMO gabarito, para o modelo aprender que a pontuação não muda o pedido. Gerador com `--gemeos`, 4.000 exemplos (2.000 pares). O endereço é preservado intacto nos gêmeos.
+
 ## Decisões técnicas
 - **LoRA em bf16**, não QLoRA: o Qwen 1.5B ocupa ~3 GB e a GPU tem 16 GB; comprimir em 4 bits só vale se o modelo não couber.
 - **Prompt curto no treino** ("Extraia o pedido da mensagem em JSON."): o cardápio é aprendido nos pesos, o que reduz tokens por chamada.

@@ -1,0 +1,10 @@
+{
+  "concordancia_com_claude_de_40": {
+    "original": 26,
+    "minusculas": 27,
+    "sem pontuacao": 33,
+    "minusculas e sem pontuacao": 33
+  },
+  "criterio": ">= 34 em todas e diferenca <= 3",
+  "aprovado": false
+}

@@ -13,3 +13,5 @@ checkpoints/
 # outputs: guarda só os resultados (números e respostas), nunca pesos nem checkpoints
 outputs/*
 !outputs/resultados/
+
+data/variantes/

@@ -43,7 +43,11 @@ def main() -> None:
     ap.add_argument("--batch", type=int, default=4)
     ap.add_argument("--acumular", type=int, default=4, help="lote efetivo = batch x acumular")
     ap.add_argument("--retomar", action="store_true", help="continua do último checkpoint em outputs/checkpoints")
+    ap.add_argument("--dados", default=str(DATA_DIR), help="pasta com train.jsonl e val.jsonl")
+    ap.add_argument("--saida", default=str(SAIDA), help="pasta onde salvar o adapter (checkpoints ficam em <saida>_ckpt)")
     a = ap.parse_args()
+    saida = Path(a.saida)
+    dados = Path(a.dados)
 
     tok = AutoTokenizer.from_pretrained(a.modelo)
     model = AutoModelForCausalLM.from_pretrained(a.modelo, dtype=torch.bfloat16).to("cuda")
@@ -54,26 +58,27 @@ def main() -> None:
     model.print_trainable_parameters()
 
     def prep(nome: str) -> Dataset:
-        ds = Dataset.from_list(carregar_jsonl(DATA_DIR / nome))
+        ds = Dataset.from_list(carregar_jsonl(dados / nome))
         return ds.map(lambda ex: tokenizar(ex, tok), remove_columns=ds.column_names)
 
     treino, val = prep("train.jsonl"), prep("val.jsonl")
 
     args = TrainingArguments(
-        output_dir=str(RAIZ / "outputs" / "checkpoints"), num_train_epochs=a.epocas, learning_rate=a.lr,
+        output_dir=str(RAIZ / "outputs" / "checkpoints") if saida == SAIDA else str(saida) + "_ckpt", num_train_epochs=a.epocas, learning_rate=a.lr,
         per_device_train_batch_size=a.batch, per_device_eval_batch_size=a.batch, gradient_accumulation_steps=a.acumular,
         lr_scheduler_type="cosine", warmup_steps=10, bf16=True, logging_steps=5, disable_tqdm=True,
         eval_strategy="epoch",
-        save_strategy="steps", save_steps=50, save_total_limit=1, report_to="none",  # checkpoint: dá para pausar remove_unused_columns=False, seed=42,
+        save_strategy="steps", save_steps=50, save_total_limit=1,  # checkpoint: dá para pausar
+        report_to="none", remove_unused_columns=False, seed=42,
     )
     trainer = Trainer(model=model, args=args, train_dataset=treino, eval_dataset=val,
                       data_collator=DataCollatorForSeq2Seq(tok, padding=True, label_pad_token_id=-100))
     trainer.train(resume_from_checkpoint=True if a.retomar else None)
 
-    SAIDA.mkdir(parents=True, exist_ok=True)
-    model.save_pretrained(SAIDA)  # salva só o adapter (pequeno)
-    tok.save_pretrained(SAIDA)
-    print("adapter salvo em", SAIDA)
+    saida.mkdir(parents=True, exist_ok=True)
+    model.save_pretrained(saida)  # salva só o adapter (pequeno)
+    tok.save_pretrained(saida)
+    print("adapter salvo em", saida.name)
 
 
 if __name__ == "__main__":

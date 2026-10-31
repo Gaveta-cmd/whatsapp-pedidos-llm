@@ -1,0 +1,31 @@
+{
+  "original": {
+    "acertos": 16,
+    "erros_por_tipo": {
+      "item_faltando": 23,
+      "observacao": 1,
+      "pagamento": 1
+    }
+  },
+  "minusculas": {
+    "acertos": 18,
+    "erros_por_tipo": {
+      "item_faltando": 22,
+      "observacao": 1
+    }
+  },
+  "sem pontuacao": {
+    "acertos": 29,
+    "erros_por_tipo": {
+      "item_faltando": 11,
+      "observacao": 1
+    }
+  },
+  "minusculas e sem pontuacao": {
+    "acertos": 29,
+    "erros_por_tipo": {
+      "item_faltando": 11,
+      "observacao": 1
+    }
+  }
+}

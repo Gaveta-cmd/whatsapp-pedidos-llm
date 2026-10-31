@@ -187,10 +187,17 @@ def escrever_item(c: dict, rng: random.Random) -> str:
 
 
 SEPARADORES = [" ", " ", ", ", ", ", ". ", ". ", "\n", ".\n", "... ", "! ", " - "]
+SEPARADORES_V3 = [" ", ", ", ". ", "\n"]
+
+# Estilo de escrita das mensagens. O v3 usava "v3" nos dois; o v4 usa "v4". Os experimentos de ablação
+# (docs/DIARIO.md) trocam um de cada vez para descobrir qual mudança do v4 piorou o modelo.
+ESTILO = {"caixa": "v4", "pontuacao": "v4"}
 
 
 def juntar(partes: list[str], rng: random.Random) -> str:
     """Junta as partes da mensagem com pontuação variada e, às vezes, ponto final (v4: o v3 era sensível a isso)."""
+    if ESTILO["pontuacao"] == "v3":
+        return rng.choice(SEPARADORES_V3).join(p for p in partes if p)
     msg = rng.choice(SEPARADORES).join(p for p in partes if p)
     if msg and rng.random() < 0.5 and msg[-1] not in ".?!":
         msg += rng.choice([".", ".", "!", "...", "!!"])
@@ -207,7 +214,10 @@ def acabamento(msg: str, rng: random.Random) -> str:
     for longo, curto in ABREV.items():
         if longo in msg and rng.random() < 0.6:
             msg = msg.replace(longo, curto)
-    msg = msg.lower() if rng.random() < 0.5 else capitalizar_frases(msg)
+    if ESTILO["caixa"] == "v3":
+        msg = msg.lower() if rng.random() < 0.7 else msg
+    else:
+        msg = msg.lower() if rng.random() < 0.5 else capitalizar_frases(msg)
     return digitar_errado(msg, rng, taxa=rng.choice([0.0, 0.0, 0.05, 0.1]))
 
 
@@ -259,8 +269,27 @@ def mensagem_sem_pedido(cardapio: dict, rng: random.Random) -> str:
     return acabamento(juntar(partes, rng), rng)
 
 
-def gerar(n: int, seed: int, proibidas: frozenset = frozenset()) -> list[dict]:
-    """proibidas: mensagens que não podem aparecer (ex.: as do teste, para não vazar para o treino)."""
+TRANSFORMACOES_GEMEO = [
+    lambda m: re.sub(r"[.?!]+(\s|$)", r" \1", m),   # sem ponto final / interrogação / exclamação
+    lambda m: m.replace(",", " "),                    # sem vírgulas
+    lambda m: re.sub(r"[.,?!]+", " ", m),             # sem nenhuma pontuação
+    lambda m: re.sub(r"[.?!]+\s", ", ", m),           # fim de frase vira vírgula
+]
+
+
+def gemeo(msg: str, pedido: Pedido, rng: random.Random) -> str:
+    """Mesma mensagem com a pontuação mexida: o gabarito é o mesmo, então o modelo aprende que pontuação
+    não muda o pedido. O endereço fica intacto (o gabarito é a cópia literal dele)."""
+    end = pedido.endereco
+    if end:
+        msg = msg.replace(end, MARCADOR_END)
+    msg = rng.choice(TRANSFORMACOES_GEMEO)(msg)
+    return msg.replace(MARCADOR_END, end) if end else msg
+
+
+def gerar(n: int, seed: int, proibidas: frozenset = frozenset(), gemeos: bool = False) -> list[dict]:
+    """proibidas: mensagens que não podem aparecer (ex.: as do teste, para não vazar para o treino).
+    gemeos: cada mensagem ganha um gêmeo com a pontuação alterada e o MESMO gabarito (n conta os dois)."""
     rng = random.Random(seed)
     cardapio = carregar_cardapio()
     vistos, exemplos = set(proibidas), []
@@ -275,11 +304,18 @@ def gerar(n: int, seed: int, proibidas: frozenset = frozenset()) -> list[dict]:
             continue
         vistos.add(msg)
         exemplos.append({"mensagem": msg, "pedido": pedido.model_dump()})
+        if gemeos and len(exemplos) < n:
+            outra = gemeo(msg, pedido, rng)
+            if outra != msg and outra not in vistos:
+                vistos.add(outra)
+                exemplos.append({"mensagem": outra, "pedido": pedido.model_dump()})
     return exemplos
 
 
-def salvar(nome: str, exemplos: list[dict]) -> None:
-    with open(DATA_DIR / nome, "w", encoding="utf-8") as f:
+def salvar(nome: str, exemplos: list[dict], pasta: Path = None) -> None:
+    pasta = pasta or DATA_DIR
+    pasta.mkdir(parents=True, exist_ok=True)
+    with open(pasta / nome, "w", encoding="utf-8") as f:
         for e in exemplos:
             f.write(json.dumps(e, ensure_ascii=False) + "\n")
 
@@ -290,12 +326,20 @@ if __name__ == "__main__":
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--manter-teste", action="store_true",
                     help="não mexe em test.jsonl; --n passa a ser só treino+val (100 de val)")
+    ap.add_argument("--caixa", choices=["v3", "v4"], default="v4")
+    ap.add_argument("--pontuacao", choices=["v3", "v4"], default="v4")
+    ap.add_argument("--saida", default=None,
+                    help="pasta de saída (só com --manter-teste): grava train/val lá e deixa data/ intacto")
+    ap.add_argument("--gemeos", action="store_true",
+                    help="cada mensagem ganha um gêmeo com pontuação alterada e o mesmo gabarito")
     a = ap.parse_args()
+    ESTILO.update(caixa=a.caixa, pontuacao=a.pontuacao)
     if a.manter_teste:
         teste = [json.loads(l)["mensagem"] for l in (DATA_DIR / "test.jsonl").read_text(encoding="utf-8").splitlines()]
-        todos = gerar(a.n + 100, a.seed + 1, frozenset(teste))
-        salvar("val.jsonl", todos[:100])
-        salvar("train.jsonl", todos[100:])
+        todos = gerar(a.n + 100, a.seed + 1, frozenset(teste), a.gemeos)
+        pasta = Path(a.saida) if a.saida else None
+        salvar("val.jsonl", todos[:100], pasta)
+        salvar("train.jsonl", todos[100:], pasta)
         print(f"treino={a.n} val=100 teste=mantido ({len(teste)})")
     else:
         todos = gerar(a.n, a.seed)
