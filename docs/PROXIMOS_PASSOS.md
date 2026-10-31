@@ -6,7 +6,7 @@
 - Critério de aceitação do v4, definido antes do resultado, em `src/robustez.py`: concordância com o Claude >= 34/40 nas 4 formas da mensagem e diferença <= 3 entre a melhor e a pior.
 
 ## Atualização: v4 já rodou e foi REPROVADO
-Concordância com o Claude: 21, 22, 27 e 26 de 40 nas 4 formas (critério: >= 34 em todas). Pior que o v3; teste sintético 92% (v3: 97%). Detalhes e hipóteses não testadas na seção 13 do diário. Não há prova final do v4. Decidir o próximo experimento (ver diário) antes de gastar mais treino. O texto abaixo é o histórico de como o v4 foi rodado.
+Concordância com o Claude: 21, 22, 27 e 26 de 40 nas 4 formas (critério: >= 34 em todas). Pior que o v3; teste sintético 92% (v3: 97%). Detalhes e hipóteses não testadas na seção 13 do diário. Não há prova final do v4. Diagnóstico na seção 14: o v4 perde o último item do pedido, até no teste sintético; os dados de treino são estatisticamente iguais aos do v3; a causa provável a testar é o treino retomado de checkpoint (ou variação de treino). Próximo experimento proposto: retreinar os dados do v4 do zero, sem interrupção, mesma semente (~12 min). O texto abaixo é o histórico de como o v4 foi rodado.
 
 ## Para rodar o v4 (no computador do projeto)
 1. Feche jogos e programas que usam a placa (Wallpaper Engine, etc.).

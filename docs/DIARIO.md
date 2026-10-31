@@ -188,8 +188,21 @@ Script `src/diagnosticar.py`: classifica cada divergência do modelo em relaçã
 - **Itens mais perdidos no v4**: suco de laranja (19), queijo coalho (12), guaraná lata (8), farofa (6). Em todas as mensagens com erro há uma frase depois do pedido (pagamento ou pergunta).
 - O erro não é de pontuação: sem pontuação o v4 continuou ruim (27/40), enquanto o v3 melhorou (34/40). A hipótese do v4 ("o problema é pontuação") estava, no mínimo, incompleta.
 
-Hipótese ainda NÃO confirmada: o modelo encerra a lista cedo quando uma frase de pagamento/pergunta vem logo depois dela. Teste planejado (contrafactual): tirar a frase de pagamento das 40 mensagens e ver se o último item volta. O teste foi iniciado e interrompido antes de terminar; nenhum resultado dele existe ainda.
-Outra explicação possível a checar: itens escritos de forma curta ("um suco", "queijo", "guarana") que o modelo precisa mapear para o nome completo do cardápio.
+**Hipótese 1: a frase depois do pedido (pagamento/pergunta) faz o modelo encerrar a lista. Teste contrafactual nas 40 mensagens (só itens comparados com o Claude, 1 execução):**
+
+| Versão da mensagem | v3 itens exatos / último item presente | v4 itens exatos / último item presente |
+|---|---|---|
+| como foi escrita | 26 / 28 | 21 / 25 |
+| só a frase com os itens (sem pagamento/pergunta) | 25 / 26 | 25 / 28 |
+| frase de pagamento/pergunta ANTES dos itens | 30 / 31 | 24 / 26 |
+
+Resultado: **a hipótese quase não se sustenta.** Sem a frase de pagamento o v3 não melhorou (26→25) e o v4 melhorou 4 em 40 (21→25), mas o último item continuou faltando em 12 a 14 mensagens. As diferenças são de +-4 em 40 mensagens, com uma execução, e podem ser ruído. Limitação: o filtro que separa "frase de itens" do resto é uma regra simples (regex) que escrevi, e pode errar.
+
+**Achado mais forte: o v4 perde o último item até no teste sintético**, que é do mesmo gerador do treino. Teste sintético (100 mensagens): v3 com 3 erros, nenhum de item faltando; v4 com 8 erros, 6 deles item faltando, e em 5 desses 6 o item perdido era o último (ex.: "...mais 2 pão de alho" no fim da mensagem). Ou seja, o defeito **não vem da diferença entre mensagens sintéticas e reais**: o v4 aprendeu a cortar o fim da lista.
+
+**Hipótese 2: os dados de treino do v4 teriam menos pedidos longos ou mais exemplos em que o último item some do texto.** Comparei o treino do v3 (2.465 exemplos, recuperado do primeiro commit) com o do v4 (3.000): média de itens 3,00 contra 2,95, pedidos com 3+ itens 54% contra 53%, último item sem palavra-chave no texto 7,1% contra 7,3% (mesma taxa nos dois, medida por regras simples que erram com erro de digitação), mensagens que terminam no último item 6,3% contra 5,9%. Praticamente iguais, então **os dados não explicam a piora** (pelo menos nessas medidas).
+
+**O que sobra, sem confirmação:** (a) o treino do v4 foi interrompido e retomado do checkpoint-200 (num segundo processo); o retomar pode ter deixado o treino diferente de uma execução contínua; (b) variação normal entre treinos (um treino só de cada versão); (c) algum efeito da pontuação/caixa de frase que as medidas acima não pegam. Experimento que separa (a)/(b) de (c): treinar de novo os dados do v4 **do zero, sem interrupção, mesma semente** (~12 min de treino). Se o resultado ficar parecido com o v3, a causa era o retomar; se continuar ruim, a causa está nos dados novos ou no acaso do treino.
 
 ## Decisões técnicas
 - **LoRA em bf16**, não QLoRA: o Qwen 1.5B ocupa ~3 GB e a GPU tem 16 GB; comprimir em 4 bits só vale se o modelo não couber.
